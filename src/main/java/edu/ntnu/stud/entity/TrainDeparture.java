@@ -1,11 +1,16 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.entity;
+
+import edu.ntnu.stud.utility.CheckValid;
 
 /**
  * The TrainDeparture class represents the departure details of a train. It includes information such as
  * the departure time, line, train number, destination, track, and delay.
+ *
+ * @author Anwar Debes
+ * @see CheckValid
+ * @version 27.10.2023
  */
 public class TrainDeparture {
-
 
   private String departureTime;
 
