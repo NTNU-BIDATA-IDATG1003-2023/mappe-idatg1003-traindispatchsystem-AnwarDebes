@@ -1,7 +1,8 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.stud.entity;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import edu.ntnu.stud.entity.TrainDeparture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
