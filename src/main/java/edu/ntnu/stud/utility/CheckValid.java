@@ -1,6 +1,7 @@
-package edu.ntnu.stud;
+package edu.ntnu.stud.utility;
 
-import java.util.List;
+import edu.ntnu.stud.entity.TrainDeparture;
+
 import java.util.Map;
 
 /**
@@ -79,7 +80,7 @@ public  class CheckValid {
 	 * @return True if the map is not empty.
 	 * @throws IllegalArgumentException If the map is empty or null.
 	 */
-  public  static boolean checkMAp(Map<Integer,TrainDeparture> map) {
+  public  static boolean checkMAp(Map<Integer, TrainDeparture> map) {
 
 	if (map.isEmpty() || map == null) {
 	  throw new IllegalArgumentException("List is empty");
