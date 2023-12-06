@@ -31,6 +31,7 @@ public class Register {
 	}
 	else if (trainDepartures.containsKey(trainDeparture.getTrainNumber())) {
 	  throw new IllegalArgumentException("Train number already exists");
+	  // legge til for å skjekke om linjer og track er ikke like for det samme tidspunkt.
 	} else {
 	  trainDepartures.put(trainDeparture.getTrainNumber(), trainDeparture);
 	  return true;
@@ -59,19 +60,40 @@ public class Register {
 	if(CheckValid.checkValidString(departureTime, "Departure time needs to be a string")) {
 	  return trainDepartures.values().stream()
 		  .filter(trainDeparture -> LocalTime.parse
-			  (trainDeparture.getDepartureTime()).isBefore(LocalTime.parse(departureTime)))
+			  (trainDeparture.getDepartureTime()).equals(LocalTime.parse(departureTime)))
 		  .toList();
 	}
 	throw new IllegalArgumentException("Departure time does not exist");
   }
 
-  public HashMap<Integer, TrainDeparture> updateListByTime(String departureTime) {
-	if(CheckValid.checkValidString(departureTime, "Departure time needs to be a string")) {
-	  trainDepartures.values().removeIf(trainDeparture -> LocalTime.parse
-		  (trainDeparture.getDepartureTime()).isBefore(LocalTime.parse(departureTime)));
-	}
-	  return trainDepartures;
+  public List<TrainDeparture> getTrainDepartureWithTrack(int track) {
+	if(CheckValid.checkValidTrackNumber(track, "Track needs to be a positive number")) {
+	  return trainDepartures.values().stream()
+		  .filter(trainDeparture -> trainDeparture.getTrack() == track)
+		  .toList();
   }
+	throw new IllegalArgumentException("Track does not exist");
+  }
+
+  public List<TrainDeparture> getTrainDepartureWithLine(String line) {
+	if(CheckValid.checkValidString(line, "Line needs to be a string")) {
+	  return trainDepartures.values().stream()
+		  .filter(trainDeparture -> trainDeparture.getLine().equals(line))
+		  .toList();
+	}
+	throw new IllegalArgumentException("Line does not exist");
+  }
+
+  public List<TrainDeparture> getTrainDepartureWithDelay(String delay) {
+	if(CheckValid.checkValidString(delay, "Delay needs to be a string")) {
+	  return trainDepartures.values().stream()
+		  .filter(trainDeparture -> trainDeparture.getDelay().equals(delay))
+		  .toList();
+	}
+	throw new IllegalArgumentException("Delay does not exist");
+  }
+
+
 
   public List<TrainDeparture> getTrainDepartureWithinTime(String startTime, String endTime) {
 	if(CheckValid.checkValidString(startTime, "Start time needs to be a string") &&
@@ -102,6 +124,22 @@ public class Register {
 	  trainDepartures.remove(trainNumber);
 	  return true;
   }
+	return false;
+  }
+
+  public boolean removeTrainDeparturesByTrack(int track) {
+	if(CheckValid.checkValidTrackNumber(track, "Track needs to be a positive number")) {
+	  trainDepartures.values().removeIf(trainDeparture -> trainDeparture.getTrack() == track);
+	  return true;
+	}
+	return false;
+
+  }
+  public boolean removeTrainDeparturesByLane(String line) {
+	if(CheckValid.checkValidString(line, "Line needs to be a string")) {
+	  trainDepartures.values().removeIf(trainDeparture -> trainDeparture.getLine().equals(line));
+	  return true;
+	}
 	return false;
   }
 

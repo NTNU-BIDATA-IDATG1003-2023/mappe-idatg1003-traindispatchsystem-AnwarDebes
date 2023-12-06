@@ -187,12 +187,13 @@ public class TrainDeparture {
 	 */
   public String display() {
 	StringBuilder sb = new StringBuilder();
-	sb.append("Train number: ").append(trainNumber).append("\t");
-	sb.append("Departure time: ").append(departureTime).append("\t");
-	sb.append("Line: ").append(line).append("\t");
-	sb.append("Destination: ").append(destination).append("\t");
-	sb.append("Track: ").append(track).append("\t");
-	sb.append("Delay: ").append(delay).append("\t");
+	sb.append("| " + trainNumber).append(" ".repeat(13- String.valueOf(trainNumber).length())).append("|");
+	sb.append(" " + departureTime).append(" ".repeat(15 - departureTime.length())).append("|");
+	sb.append(" " + line).append(" ".repeat(21 - line.length())).append("|");
+	sb.append(" " + destination).append(" ".repeat(21 - destination.length())).append("|");
+	sb.append(" " + track).append(" ".repeat(9 - String.valueOf(track).length())).append("|");
+	sb.append(" " + delay).append(" ".repeat(6 - delay.length())).append("|");
+	sb.append("\n").append("|").append("-".repeat(96)).append("|");
 	return sb.toString();
   }
 }
