@@ -265,13 +265,21 @@ public class UI {
         return goBack;
     }
 
+    private boolean checkIfTrainDepartureListIsEmpty() {
+    	try{
+            register.getTrainDepartures();
+            return true;
+        }catch (IllegalArgumentException e){
+            System.err.println("List is empty, try adding some departures first");
+        }
+    	return false;
+    }
+
     private void getTrainDepartureWithDepartureTime() {
 
         String departureTime = inputHandler.getTimeInput
                 ("Enter departure time: ", "Time needs to be in format hh:mm");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+      if(checkIfTrainDepartureListIsEmpty()) {
             try {
 				getTrainStationName(false);
 				boardsAndMenusHandler.printClock(clock);
@@ -283,16 +291,13 @@ public class UI {
             }
         }
         boardsAndMenusHandler.printSearchMenu();
-
     }
 
     private void getTrainDepartureWithTrack() {
 
         int track = inputHandler.getTrackInput
                 ("Enter track: ", "Track needs to be a positive number");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
 				getTrainStationName(false);
 				boardsAndMenusHandler.printClock(clock);
@@ -310,9 +315,7 @@ public class UI {
 
         String line = inputHandler.getStringInput
                 ("Enter line: ", "Line cant be empty or blank");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
                 getTrainStationName(false);
                 boardsAndMenusHandler.printClock(clock);
@@ -330,9 +333,7 @@ public class UI {
 
         String delay = inputHandler.getTimeInput
                 ("Enter delay: ", "Delay needs to be in format hh:mm");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
 				getTrainStationName(false);
 				boardsAndMenusHandler.printClock(clock);
@@ -403,9 +404,7 @@ public class UI {
 
         String destination = inputHandler.getStringInput
                 ("Enter destination: ", "Destination needs to be a valid name");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try{
             getTrainStationName(false);
             boardsAndMenusHandler.printClock(clock);
@@ -420,18 +419,15 @@ public class UI {
     }
 
     private void printAllTrainDepartures() {
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("There are no train departures, the list is empty");
-            boardsAndMenusHandler.printMenu();
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             getTrainStationName(false);
             boardsAndMenusHandler.printClock(clock);
             boardsAndMenusHandler.printTrainDepartureBoardHeader();
             register.sortTrainDepartures();
             register.getTrainDepartures().values()
                     .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
-            boardsAndMenusHandler.printMenu();
         }
+        boardsAndMenusHandler.printMenu();
     }
 
 
@@ -440,11 +436,9 @@ public class UI {
         String departureTime = inputHandler.getStringInput
                 ("Enter departure time: "
                         , "Time needs to be in format hh:mm");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
-                register.removeTrainDepartures(departureTime);
+                register.removeTrainDeparturesWithTime(departureTime);
                 System.out.println("Train departures removed");
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departures was not removed because time was not valid");
@@ -456,9 +450,7 @@ public class UI {
     private void removeTrainDeparturesWithTrack() {
         int track = inputHandler.getTrackInput
                 ("Enter track: ", "Track needs to be a positive number");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
                 register.removeTrainDeparturesByTrack(track);
                 System.out.println("Train departures removed");
@@ -472,9 +464,7 @@ public class UI {
     private void removeTrainDeparturesWithLane() {
         String line = inputHandler.getStringInput
                 ("Enter line: ", "Line cant be empty or blank");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
                 register.removeTrainDeparturesByLane(line);
                 System.out.println("Train departures removed");
@@ -488,9 +478,7 @@ public class UI {
     private void removeTrainDeparturesWithDestination() {
         String destination = inputHandler.getStringInput
                 ("Enter destination: ", "Destination needs to be a valid name");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
                 register.removeTrainDeparturesByDestination(destination);
                 System.out.println("Train departures removed");
@@ -505,9 +493,7 @@ public class UI {
         int trainNumber = inputHandler.getIntInput
 
                 ("Enter train number: ", "Train number needs to be a positive number");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
                 register.removeTrainDepartures(trainNumber);
                 System.out.println("Train departures removed");
@@ -523,9 +509,7 @@ public class UI {
 
         int trainNumber = inputHandler.getIntInput("Enter train number: ",
                 "Train number needs to be a positive number");
-        if (register.getTrainDepartures().isEmpty()) {
-            System.err.println("List is empty, try adding some departures first");
-        } else {
+        if(checkIfTrainDepartureListIsEmpty()) {
             try {
 				getTrainStationName(false);
 				boardsAndMenusHandler.printClock(clock);

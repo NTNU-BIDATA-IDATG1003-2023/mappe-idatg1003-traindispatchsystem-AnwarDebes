@@ -2,6 +2,8 @@ package edu.ntnu.stud.entity;
 
 import edu.ntnu.stud.utility.CheckValid;
 
+import java.time.LocalTime;
+
 /**
  * The TrainDeparture class represents the departure details of a train. It includes information such as
  * the departure time, line, train number, destination, track, and delay.
@@ -187,12 +189,20 @@ public class TrainDeparture {
 	 */
   public String display() {
 	StringBuilder sb = new StringBuilder();
-	sb.append("| " + trainNumber).append(" ".repeat(13- String.valueOf(trainNumber).length())).append("|");
-	sb.append(" " + departureTime).append(" ".repeat(15 - departureTime.length())).append("|");
+	sb.append("| " + departureTime).append(" ".repeat(15 - departureTime.length())).append("|");
 	sb.append(" " + line).append(" ".repeat(21 - line.length())).append("|");
+	  sb.append(" " + trainNumber).append(" ".repeat(13- String.valueOf(trainNumber).length())).append("|");
 	sb.append(" " + destination).append(" ".repeat(21 - destination.length())).append("|");
-	sb.append(" " + track).append(" ".repeat(9 - String.valueOf(track).length())).append("|");
-	sb.append(" " + delay).append(" ".repeat(6 - delay.length())).append("|");
+	if(CheckValid.checkIfThereIsDelay(LocalTime.parse(delay))) {
+		sb.append(" " + delay).append(" ".repeat(6 - delay.length())).append("|");
+	}else{
+		sb.append(" " ).append(" ".repeat(6 )).append("|");
+	}
+	  if(CheckValid.checkValidTrackNumber(track,"")) {
+		  sb.append(" " + track).append(" ".repeat(9 - String.valueOf(track).length())).append("|");
+	  }else{
+		  sb.append(" " ).append(" ".repeat(9 )).append("|");
+	  }
 	sb.append("\n").append("|").append("-".repeat(96)).append("|");
 	return sb.toString();
   }

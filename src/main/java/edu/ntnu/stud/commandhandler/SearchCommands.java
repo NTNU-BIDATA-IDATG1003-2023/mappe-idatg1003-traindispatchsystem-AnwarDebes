@@ -4,8 +4,6 @@ package edu.ntnu.stud.commandhandler;
  *Representations for all the valid command words for the search menu
  *along with an int that shows command ordinal.
  *
- * @author Yasin Hessnawi
- * @version 0.0.1 (20.11.22)
  */
 public enum SearchCommands
 {

@@ -2,6 +2,7 @@ package edu.ntnu.stud.utility;
 
 import edu.ntnu.stud.entity.TrainDeparture;
 
+import java.time.LocalTime;
 import java.util.Map;
 
 /**
@@ -87,4 +88,8 @@ public  class CheckValid {
 	}
 	return true;
   }
+
+	public static boolean checkIfThereIsDelay(LocalTime delay) {
+	  return delay.isAfter(LocalTime.parse("00:00"));
+	}
 }
