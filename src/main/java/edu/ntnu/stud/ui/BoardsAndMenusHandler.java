@@ -57,9 +57,10 @@ public class BoardsAndMenusHandler {
 	|	2. Edit Departure time                                                                                         |
 	|	3. Edit Track                                                                                                  |
 	|	4. Edit Delay                                                                                                  |
-	|	5. Edit Line                                                                                                   | 
-	|	6. Back                                                                                                 	   |
-	|	7. Exit                                                                                                        |
+	|	5. Edit Line                                                                                                   |
+	|	6. Edit Train number                                                                                           | 
+	|	7. Back                                                                                                 	   |
+	|	8. Exit                                                                                                        |
 	+------------------------------------------------------------------------------------------------------------------+
 		  """);
 
@@ -105,8 +106,8 @@ public class BoardsAndMenusHandler {
 	*	ii) To add a train departure you need to use command 1.                                                        *
 	*	iii) when being asked for input you need to follow                                                             *
 	*	the instructions otherwise you will get errors.                                                                *
-	*	iv) when you are done with the application you can exit by using command 7.                                    *
-	*	v) if you need help you can printer this message again by using command 6.                                     *
+	*	iv) when you are done with the application you can exit by using command 8.                                    *
+	*	v) if you need help you can printer this message again by using command 7.                                     *
 	********************************************************************************************************************
 		""");
 

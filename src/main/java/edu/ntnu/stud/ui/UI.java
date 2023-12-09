@@ -6,6 +6,7 @@ import edu.ntnu.stud.entity.TrainDeparture;
 import edu.ntnu.stud.register.Register;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class UI {
@@ -132,31 +133,6 @@ public class UI {
     }
 
 
-    public void searchMenu() {
-
-        boardsAndMenusHandler.printSearchMenu();
-        boolean finished = false;
-        while (!finished) {
-            Command command = parser.getCommand();
-            finished = processSearchMenuCommand(command);
-        }
-        mainMenu();
-    }
-
-    public void editMenu() {
-        int trainNumber = inputHandler.getIntInput
-                ("Enter train number: ", "Train number needs to be a positive number");
-        TrainDeparture trainDeparture = register.getTrainDepartureWithNumber(trainNumber);
-
-        boardsAndMenusHandler.printEditMenu();
-        boolean finished = false;
-        while (!finished) {
-            Command command = parser.getCommand();
-            finished = processEditMenuCommand(command, trainDeparture);
-        }
-        mainMenu();
-    }
-
     public void removeMenu() {
         boardsAndMenusHandler.printRemoveMenu();
         boolean finished = false;
@@ -189,6 +165,22 @@ public class UI {
         return goBack;
     }
 
+
+    public void editMenu() {
+        int trainNumber = inputHandler.getIntInput
+                ("Enter train number: ", "Train number needs to be a positive number");
+        List<TrainDeparture> trainDepartures = register.getTrainDepartureWithNumber(trainNumber);
+
+        TrainDeparture trainDeparture = register.getTrainDeparture(trainNumber, getChoiceFromResults(trainDepartures) -1);
+        boardsAndMenusHandler.printEditMenu();
+        boolean finished = false;
+        while (!finished) {
+            Command command = parser.getCommand();
+            finished = processEditMenuCommand(command, trainDeparture);
+        }
+        mainMenu();
+    }
+
     private boolean processEditMenuCommand(Command command, TrainDeparture trainDeparture) {
 
         boolean goBack = false;
@@ -198,8 +190,9 @@ public class UI {
             case DESTINATION -> editDestination(trainDeparture);
             case DEPARTURE_TIME -> editDepartureTime(trainDeparture);
             case TRACK -> editTrack(trainDeparture);
-            case LANE -> editLine(trainDeparture);
+            case LANE -> editLane(trainDeparture);
             case DELAY -> editDelay(trainDeparture);
+            case TRAIN_NUMBER -> editTrainNumber(trainDeparture);
             case BACK -> goBack = true;
             case EXIT -> System.exit(0);
             default -> {
@@ -211,35 +204,118 @@ public class UI {
     }
 
     private void editDelay(TrainDeparture trainDeparture) {
+        TrainDeparture oldTrainDeparture = trainDeparture;
         String newDelay = inputHandler.getTimeInput
                 ("Enter new delay: ", "Delay needs to be in format hh:mm");
+        register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setDelay(newDelay);
-        System.out.println("Delay changed successfully ");
+        try {
+            register.addTrainDeparture(trainDeparture);
+            System.out.println("Delay changed successfully ");
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException f) {
+            System.err.println("Editing the delay was not successful, because the changes you made " +
+                    "resulted in a train departure that was not valid");
+            register.addTrainDeparture(oldTrainDeparture);
+        }
         boardsAndMenusHandler.printEditMenu();
     }
 
-    private void editLine(TrainDeparture trainDeparture) {
+    private void editLane(TrainDeparture trainDeparture) {
+        TrainDeparture oldTrainDeparture = trainDeparture;
+
         String newLine = inputHandler.getStringInput
                 ("Enter new line: ", "Line cant be empty or blank");
+        register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setLine(newLine);
-        System.out.println("Line changed successfully ");
+        try {
+            register.addTrainDeparture(trainDeparture);
+            System.out.println("Line changed successfully ");
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException f) {
+            System.err.println("Editing the Lane was not successful, because the changes you made " +
+                    "resulted in a train departure that was not valid");
+            register.addTrainDeparture(oldTrainDeparture);
+        }
         boardsAndMenusHandler.printEditMenu();
     }
 
     private void editTrack(TrainDeparture trainDeparture) {
+        TrainDeparture oldTrainDeparture = trainDeparture;
+
         int newTrack = inputHandler.getTrackInput
                 ("Enter new track: ", "Track needs to be a positive number");
+        register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setTrack(newTrack);
-        System.out.println("Track changed successfully ");
+        try {
+            register.addTrainDeparture(trainDeparture);
+            System.out.println("Track changed successfully ");
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException f) {
+            System.err.println("Editing the track was not successful, because the changes you made " +
+                    "resulted in a train departure that was not valid");
+            register.addTrainDeparture(oldTrainDeparture);
+        }
         boardsAndMenusHandler.printEditMenu();
     }
 
     private void editDepartureTime(TrainDeparture trainDeparture) {
+        TrainDeparture oldTrainDeparture = trainDeparture;
         String newDepartureTime = inputHandler.getTimeInput
                 ("Enter new departure time: ", "Time needs to be in format hh:mm");
+        register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setDepartureTime(newDepartureTime);
-        System.out.println("Departure time changed successfully ");
+        try {
+            register.addTrainDeparture(trainDeparture);
+            System.out.println("Departure time changed successfully ");
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException f) {
+            System.err.println("Editing the departure time was not successful, because the changes you made " +
+                    "resulted in a train departure that was not valid");
+            register.addTrainDeparture(oldTrainDeparture);
+        }
         boardsAndMenusHandler.printEditMenu();
+    }
+
+    private void editDestination(TrainDeparture trainDeparture) {
+        String newDestination = inputHandler.getStringInput
+                ("Enter new destination: ", "Destination needs to be a valid name");
+        TrainDeparture oldTrainDeparture = trainDeparture;
+        register.getTrainDepartures().remove(trainDeparture);
+        trainDeparture.setDestination(newDestination);
+        try {
+            register.addTrainDeparture(trainDeparture);
+            System.out.println("Destination changed successfully ");
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException f) {
+            System.err.println("Editing the destination was not successful, because the changes you made " +
+                    "resulted in a train departure that was not valid");
+            register.addTrainDeparture(oldTrainDeparture);
+        }
+        boardsAndMenusHandler.printEditMenu();
+    }
+
+    private void editTrainNumber(TrainDeparture trainDeparture) {
+        TrainDeparture oldTrainDeparture = trainDeparture;
+        int newTrainNumber = inputHandler.getIntInput
+                ("Enter new train number: ", "Train number needs to be a positive number");
+        register.getTrainDepartures().remove(trainDeparture);
+        trainDeparture.setTrainNumber(newTrainNumber);
+        try {
+            register.addTrainDeparture(trainDeparture);
+            System.out.println("Train number changed successfully ");
+        } catch (IllegalArgumentException | IllegalStateException | NullPointerException f) {
+            System.err.println("Editing the train number was not successful, because the changes you made " +
+                    "resulted in a train departure that was not valid");
+            register.addTrainDeparture(oldTrainDeparture);
+        }
+        boardsAndMenusHandler.printEditMenu();
+    }
+
+    public void searchMenu() {
+
+        boardsAndMenusHandler.printSearchMenu();
+        boolean finished = false;
+        while (!finished) {
+            Command command = parser.getCommand();
+            finished = processSearchMenuCommand(command);
+        }
+        mainMenu();
     }
 
     private boolean processSearchMenuCommand(Command command) {
@@ -266,24 +342,24 @@ public class UI {
     }
 
     private boolean checkIfTrainDepartureListIsEmpty() {
-    	try{
+        try {
             register.getTrainDepartures();
             return true;
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             System.err.println("List is empty, try adding some departures first");
         }
-    	return false;
+        return false;
     }
 
     private void getTrainDepartureWithDepartureTime() {
 
         String departureTime = inputHandler.getTimeInput
                 ("Enter departure time: ", "Time needs to be in format hh:mm");
-      if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
             try {
-				getTrainStationName(false);
-				boardsAndMenusHandler.printClock(clock);
-				boardsAndMenusHandler.printTrainDepartureBoardHeader();
+                getTrainStationName(false);
+                boardsAndMenusHandler.printClock(clock);
+                boardsAndMenusHandler.printTrainDepartureBoardHeader();
                 register.getTrainDepartureWithDepartureTime(departureTime).forEach(trainDeparture ->
                         System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e) {
@@ -297,11 +373,11 @@ public class UI {
 
         int track = inputHandler.getTrackInput
                 ("Enter track: ", "Track needs to be a positive number");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
             try {
-				getTrainStationName(false);
-				boardsAndMenusHandler.printClock(clock);
-				boardsAndMenusHandler.printTrainDepartureBoardHeader();
+                getTrainStationName(false);
+                boardsAndMenusHandler.printClock(clock);
+                boardsAndMenusHandler.printTrainDepartureBoardHeader();
                 register.getTrainDepartureWithTrack(track).forEach(trainDeparture ->
                         System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e) {
@@ -315,12 +391,12 @@ public class UI {
 
         String line = inputHandler.getStringInput
                 ("Enter line: ", "Line cant be empty or blank");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
             try {
                 getTrainStationName(false);
                 boardsAndMenusHandler.printClock(clock);
                 boardsAndMenusHandler.printTrainDepartureBoardHeader();
-                register.getTrainDepartureWithLine(line)
+                register.getTrainDepartureWithLane(line)
                         .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departure(s) was not found");
@@ -333,13 +409,30 @@ public class UI {
 
         String delay = inputHandler.getTimeInput
                 ("Enter delay: ", "Delay needs to be in format hh:mm");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
             try {
-				getTrainStationName(false);
-				boardsAndMenusHandler.printClock(clock);
-				boardsAndMenusHandler.printTrainDepartureBoardHeader();
+                getTrainStationName(false);
+                boardsAndMenusHandler.printClock(clock);
+                boardsAndMenusHandler.printTrainDepartureBoardHeader();
                 register.getTrainDepartureWithDelay(delay)
                         .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
+            } catch (IllegalArgumentException e) {
+                System.err.println("Train departure(s) was not found");
+            }
+        }
+        boardsAndMenusHandler.printSearchMenu();
+    }
+
+    private void getTrainDepartureWithNumber() {
+
+        int trainNumber = inputHandler.getIntInput("Enter train number: ",
+                "Train number needs to be a positive number");
+        if (checkIfTrainDepartureListIsEmpty()) {
+            try {
+                getTrainStationName(false);
+                boardsAndMenusHandler.printClock(clock);
+                boardsAndMenusHandler.printTrainDepartureBoardHeader();
+                register.getTrainDepartureWithNumber(trainNumber).forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departure(s) was not found");
             }
@@ -388,14 +481,21 @@ public class UI {
         }
         TrainDeparture trainDeparture =
                 new TrainDeparture(departureTime, line, trainNumber, destination, track, delay);
-        if (register.addTrainDeparture(trainDeparture)) {
+        try {
+            register.addTrainDeparture(trainDeparture);
             System.out.println("Train departure added");
             getTrainStationName(false);
             boardsAndMenusHandler.printClock(clock);
             boardsAndMenusHandler.printTrainDepartureBoardHeader();
             System.out.println(trainDeparture.display());
-        } else {
-            System.err.println("Train departure was not added");
+        } catch (IllegalArgumentException e) {
+            System.err.println("Train departure was not added because a train " +
+                    "departure with the given time and track already exists");
+        } catch (IllegalStateException e) {
+            System.err.println("Train departure was not added because a train " +
+                    "departure with the given time and train number already exists");
+        } catch (NullPointerException e) {
+            System.err.println("Train departure was not added because it was not valid");
         }
         boardsAndMenusHandler.printMenu();
     }
@@ -404,13 +504,13 @@ public class UI {
 
         String destination = inputHandler.getStringInput
                 ("Enter destination: ", "Destination needs to be a valid name");
-        if(checkIfTrainDepartureListIsEmpty()) {
-            try{
-            getTrainStationName(false);
-            boardsAndMenusHandler.printClock(clock);
-            boardsAndMenusHandler.printTrainDepartureBoardHeader();
-            register.getTrainDepartureWithDestination(destination)
-                    .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
+        if (checkIfTrainDepartureListIsEmpty()) {
+            try {
+                getTrainStationName(false);
+                boardsAndMenusHandler.printClock(clock);
+                boardsAndMenusHandler.printTrainDepartureBoardHeader();
+                register.getTrainDepartureWithDestination(destination)
+                        .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departure(s) was not found");
             }
@@ -418,27 +518,32 @@ public class UI {
         boardsAndMenusHandler.printSearchMenu();
     }
 
-    private void printAllTrainDepartures() {
-        if(checkIfTrainDepartureListIsEmpty()) {
-            getTrainStationName(false);
-            boardsAndMenusHandler.printClock(clock);
-            boardsAndMenusHandler.printTrainDepartureBoardHeader();
-            register.sortTrainDepartures();
-            register.getTrainDepartures().values()
-                    .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
-        }
-        boardsAndMenusHandler.printMenu();
-    }
 
+    private int getChoiceFromResults(List<TrainDeparture> trainDepartures) {
+        System.out.println("Please choose which train departure you want to work on: ");
+        boardsAndMenusHandler.printTrainDepartureBoardHeader();
+        int i;
+        StringBuilder result = new StringBuilder();
+        for (i = 0; i < trainDepartures.size(); i++) {
+            result.delete(0, result.length());
+            result.append(trainDepartures.get(i).display());
+            result.append("\n \t\t\t\t\t\tTo choose the train departure above enter: " + (i + 1));
+            result.append("\n" + "|" + ("-".repeat(96)) + "|");
+            System.out.println(result);
+        }
+        int choice = inputHandler.getIntInput("Enter number: ", "Please enter a valid number");
+        return choice;
+    }
 
     private void removeTrainDeparturesWithTime() {
 
         String departureTime = inputHandler.getStringInput
                 ("Enter departure time: "
                         , "Time needs to be in format hh:mm");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
+            List<TrainDeparture> trainDepartures = register.getTrainDepartureWithDepartureTime(departureTime);
             try {
-                register.removeTrainDeparturesWithTime(departureTime);
+                register.removeTrainDeparturesWithTime(departureTime, getChoiceFromResults(trainDepartures)-1);
                 System.out.println("Train departures removed");
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departures was not removed because time was not valid");
@@ -450,9 +555,10 @@ public class UI {
     private void removeTrainDeparturesWithTrack() {
         int track = inputHandler.getTrackInput
                 ("Enter track: ", "Track needs to be a positive number");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
+            List<TrainDeparture> trainDepartures = register.getTrainDepartureWithTrack(track);
             try {
-                register.removeTrainDeparturesByTrack(track);
+                register.removeTrainDeparturesByTrack(track, getChoiceFromResults(trainDepartures)-1);
                 System.out.println("Train departures removed");
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departures was not removed because track was not valid");
@@ -462,14 +568,15 @@ public class UI {
     }
 
     private void removeTrainDeparturesWithLane() {
-        String line = inputHandler.getStringInput
-                ("Enter line: ", "Line cant be empty or blank");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        String lane = inputHandler.getStringInput
+                ("Enter lane: ", "Line cant be empty or blank");
+        if (checkIfTrainDepartureListIsEmpty()) {
+            List<TrainDeparture> trainDepartures = register.getTrainDepartureWithLane(lane);
             try {
-                register.removeTrainDeparturesByLane(line);
+                register.removeTrainDeparturesByLane(lane, getChoiceFromResults(trainDepartures)-1);
                 System.out.println("Train departures removed");
             } catch (IllegalArgumentException e) {
-                System.err.println("Train departures was not removed because line was not valid");
+                System.err.println("Train departures was not removed because lane was not valid");
             }
         }
         boardsAndMenusHandler.printRemoveMenu();
@@ -478,9 +585,10 @@ public class UI {
     private void removeTrainDeparturesWithDestination() {
         String destination = inputHandler.getStringInput
                 ("Enter destination: ", "Destination needs to be a valid name");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
+            List<TrainDeparture> trainDepartures = register.getTrainDepartureWithDestination(destination);
             try {
-                register.removeTrainDeparturesByDestination(destination);
+                register.removeTrainDeparturesByDestination(destination, getChoiceFromResults(trainDepartures)-1);
                 System.out.println("Train departures removed");
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departures was not removed because destination was not valid");
@@ -493,9 +601,10 @@ public class UI {
         int trainNumber = inputHandler.getIntInput
 
                 ("Enter train number: ", "Train number needs to be a positive number");
-        if(checkIfTrainDepartureListIsEmpty()) {
+        if (checkIfTrainDepartureListIsEmpty()) {
+            List<TrainDeparture> trainDepartures = register.getTrainDepartureWithNumber(trainNumber);
             try {
-                register.removeTrainDepartures(trainNumber);
+                register.removeTrainDepartures(trainNumber, getChoiceFromResults(trainDepartures) -1);
                 System.out.println("Train departures removed");
             } catch (IllegalArgumentException e) {
                 System.err.println("Train departures was not removed because train number was not valid");
@@ -505,30 +614,16 @@ public class UI {
     }
 
 
-    private void getTrainDepartureWithNumber() {
-
-        int trainNumber = inputHandler.getIntInput("Enter train number: ",
-                "Train number needs to be a positive number");
-        if(checkIfTrainDepartureListIsEmpty()) {
-            try {
-				getTrainStationName(false);
-				boardsAndMenusHandler.printClock(clock);
-				boardsAndMenusHandler.printTrainDepartureBoardHeader();
-                System.out.println(register.getTrainDepartureWithNumber(trainNumber).display());
-            } catch (IllegalArgumentException e) {
-                System.err.println("Train departure(s) was not found");
-            }
+    private void printAllTrainDepartures() {
+        if (checkIfTrainDepartureListIsEmpty()) {
+            getTrainStationName(false);
+            boardsAndMenusHandler.printClock(clock);
+            boardsAndMenusHandler.printTrainDepartureBoardHeader();
+            register.sortTrainDepartures()
+                    .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
         }
-        boardsAndMenusHandler.printSearchMenu();
+        boardsAndMenusHandler.printMenu();
     }
 
-
-    private void editDestination(TrainDeparture trainDeparture) {
-        String newDestination = inputHandler.getStringInput
-                ("Enter new destination: ", "Destination needs to be a valid name");
-        trainDeparture.setDestination(newDestination);
-        System.out.println("Destination changed successfully ");
-        boardsAndMenusHandler.printEditMenu();
-    }
 
 }

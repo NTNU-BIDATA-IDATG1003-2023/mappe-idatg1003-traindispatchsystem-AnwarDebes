@@ -3,7 +3,7 @@ package edu.ntnu.stud.utility;
 import edu.ntnu.stud.entity.TrainDeparture;
 
 import java.time.LocalTime;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * The CheckValid class provides static methods to perform various validation checks.
@@ -77,13 +77,13 @@ public  class CheckValid {
 	/**
 	 * Checks if the provided map of TrainDepartures is not empty.
 	 *
-	 * @param map  The map to be checked.
+	 * @param set  The map to be checked.
 	 * @return True if the map is not empty.
 	 * @throws IllegalArgumentException If the map is empty or null.
 	 */
-  public  static boolean checkMAp(Map<Integer, TrainDeparture> map) {
+  public  static boolean checkSet(Set<TrainDeparture> set) {
 
-	if (map.isEmpty() || map == null) {
+	if (set.isEmpty() || set == null) {
 	  throw new IllegalArgumentException("List is empty");
 	}
 	return true;
@@ -91,5 +91,8 @@ public  class CheckValid {
 
 	public static boolean checkIfThereIsDelay(LocalTime delay) {
 	  return delay.isAfter(LocalTime.parse("00:00"));
+	}
+	public static boolean checkIfThereIsTrack(int track) {
+	  return track != -1;
 	}
 }

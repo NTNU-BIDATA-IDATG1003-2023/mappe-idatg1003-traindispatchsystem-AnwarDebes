@@ -198,7 +198,7 @@ public class TrainDeparture {
 	}else{
 		sb.append(" " ).append(" ".repeat(6 )).append("|");
 	}
-	  if(CheckValid.checkValidTrackNumber(track,"")) {
+	  if(CheckValid.checkIfThereIsTrack(track)) {
 		  sb.append(" " + track).append(" ".repeat(9 - String.valueOf(track).length())).append("|");
 	  }else{
 		  sb.append(" " ).append(" ".repeat(9 )).append("|");
