@@ -14,16 +14,17 @@ import java.time.LocalTime;
  */
 public class TrainDeparture {
 
+    // The departure time of the train
     private LocalTime departureTime;
-
+    // The line on which the train operates
     private String line;
-
+    // The number assigned to the train
     private int trainNumber;
-
+    // The destination of the train
     private String destination;
-
+    // The track from which the train departs
     private int track;
-
+    // The delay of the train
     private LocalTime delay;
 
     /**

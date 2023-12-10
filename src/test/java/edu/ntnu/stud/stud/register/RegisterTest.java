@@ -64,7 +64,7 @@ Register register;
      register.getTrainDepartureWithNumber(-1);
      fail("Should throw exception");
    } catch (IllegalArgumentException e) {
-     assertEquals("Train number should be positiv", e.getMessage());
+     assertEquals("Train number should be positive", e.getMessage());
    }
   }
 

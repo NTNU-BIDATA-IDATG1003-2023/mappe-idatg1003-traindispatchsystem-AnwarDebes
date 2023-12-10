@@ -7,7 +7,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * The CheckValid class provides static methods to perform various validation checks.
+ * The CheckValid class provides static methods to perform various validation checks. It is used
+ * to check if a string is not null, empty, or blank, if an integer is positive, if a track number
+ * is not less than -1, if a time is in the format hh:mm, and if a map of TrainDepartures is not
+ * empty.
+ *
+ * @author Anwar Debes
+ * @version 0.0.1
  */
 public  class CheckValid {
 	/**
@@ -90,13 +96,28 @@ public  class CheckValid {
 	return true;
   }
 
+	/**
+	 * Checks if the provided map of TrainDepartures is not empty.
+	 * @param delay The delay to be checked
+	 * @return True if the delay is after 00:00
+	 */
 	public static boolean checkIfThereIsDelay(LocalTime delay) {
 	  return delay.isAfter(LocalTime.parse("00:00"));
 	}
+
+	/**
+	 * Checks if the provided map of TrainDepartures is not empty.
+	 * @param track The track to be checked
+	 * @return True if the track is not -1
+	 */
 	public static boolean checkIfThereIsTrack(int track) {
 	  return track != -1;
 	}
 
+	/**
+	 * Checks if the provided map of TrainDepartures is not empty.
+	 * @param laneMap The map to be checked
+	 */
 	public static void checkMap(Map<String, String> laneMap) {
 	  if (laneMap.isEmpty() || laneMap == null) {
 		throw new IllegalArgumentException("Map is empty");

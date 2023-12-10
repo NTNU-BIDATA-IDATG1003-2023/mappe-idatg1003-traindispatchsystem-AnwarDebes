@@ -1,9 +1,11 @@
 package edu.ntnu.stud.commandhandler;
 
 /**
- *Representations for all the valid command words for the adjust menu
- *along with an int that shows command ordinal.
+ * Representations for all the valid command words for the adjust menu
+ * along with an int that shows command ordinal.
  *
+ * @author Anwar Debes
+ * @version 0.0.1
  */
 public enum EditCommands
 {
@@ -23,6 +25,10 @@ public enum EditCommands
     private EditCommands(int adjustCommandInput)
     {
         this.adjustCommandInput = adjustCommandInput;
+    }
+    public int getAdjustCommandInput()
+    {
+        return adjustCommandInput;
     }
 
 }

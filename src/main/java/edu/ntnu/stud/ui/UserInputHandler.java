@@ -10,6 +10,7 @@ import java.util.Scanner;
  * overloaded to be used in different classes)
  *
  * @author Anwar Debs
+ * @version 0.0.1
  * @see CheckValid
  */
 public class UserInputHandler

@@ -1,21 +1,36 @@
 package edu.ntnu.stud.commandhandler;
 
 /**
- *Representations for all the valid command words for the search menu
- *along with an int that shows command ordinal.
- *
+ * Representations for all the valid command words for the search menu
+ * along with an int that shows command ordinal.
+ * @author Anwar Debes
+ * @version 0.0.1
  */
 public enum SearchCommands
 {
-    UNKNOWN(0), NUMBER(1), DEPARTURE(2),
-     DEPARTURE_TIME(3), TRACK(4),
-    LANE(5),  DELAY(6),HELP(7), BACK(8),
+    // Command for an unknown action
+    UNKNOWN(0),
+    // Command to search by number
+    NUMBER(1),
+    // Command to search by departure location
+    DEPARTURE(2),
+    //  Command to search by departure time
+    DEPARTURE_TIME(3),
+    // Command to search by track
+    TRACK(4),
+    // Command to search by lane
+    LANE(5),
+    // Command to search by delay
+    DELAY(6),
+    // Command to show help
+    HELP(7),
+    // Command to go back to main menu
+    BACK(8),
+    // Command to exit the program
     QUIT(9);
 
 
-
-
-    // The searchCommand input.
+    // The searchCommand for input of search menu
     private int commandInput;
 
     /**

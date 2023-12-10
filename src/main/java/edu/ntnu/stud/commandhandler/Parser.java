@@ -3,16 +3,18 @@ package edu.ntnu.stud.commandhandler;
 import edu.ntnu.stud.ui.UserInputHandler;
 
 /**
- * This parser reads user input and tries to interpret it as a menu
- * command.
+ * This parser reads user input and tries to interpret it as a menu command.
  * The parser has a set of known command words. It checks user input against
  * the command word ordinal, and if the input is not one of the known commands, it
  * returns a command object that is marked as an unknown command.
- *
+ * @author Anwar Debes
+ * @version 0.0.1
  */
 public class Parser
 {
-    private final CommandHandler commands;  // holds all valid command inputs
+    // holds all valid command inputs
+    private final CommandHandler commands;
+    // holds the user input
     private final UserInputHandler userInputHandler;
 
     /**
@@ -20,7 +22,7 @@ public class Parser
      *
      * @param userInputHandler the userInputHandler from UserInterface
      */
-    public Parser( UserInputHandler userInputHandler)
+    public Parser(UserInputHandler userInputHandler)
     {
         commands = new CommandHandler();
         this.userInputHandler = userInputHandler;

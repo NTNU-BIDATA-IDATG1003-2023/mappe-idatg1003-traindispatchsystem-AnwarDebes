@@ -1,9 +1,10 @@
 package edu.ntnu.stud.commandhandler;
 
 /**
- *Representations for all the valid command words for the main menu
- *along with an int that shows command ordinal.
- *
+ * Representations for all the valid command words for the main menu
+ * along with an int that shows command ordinal.
+ * @author Anwar Debes
+ * @version 0.0.1
  */
 public enum MainMenuCommands
 {

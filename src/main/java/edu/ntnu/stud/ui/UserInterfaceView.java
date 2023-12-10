@@ -1,12 +1,27 @@
 package edu.ntnu.stud.ui;
 
-public class BoardsAndMenusHandler {
 
-    public BoardsAndMenusHandler() {
+/**
+ * The BoardsAndMenusHandler class handles the display of various user interface components
+ * for a train dispatch application. It includes methods for printing different types of menus,
+ * boards, and messages to the console.
+ *
+ * @author Anwar Debes
+ * @version 0.0.1
+ */
+public class UserInterfaceView
+{
+
+    /**
+     * Empty constructs BoardsAndMenusHandler class
+     */
+    public UserInterfaceView() {
 
     }
 
-
+    /**
+     * Prints the header for the train departure board
+     */
     public void printTrainDepartureBoardHeader() {
 
         System.out.print("""
@@ -16,6 +31,11 @@ public class BoardsAndMenusHandler {
                 """);
     }
 
+    /**
+     * Prints the current time on the clock board.
+     *
+     * @param clock The current time to be displayed.
+     */
     public void printClock(String clock) {
 
         StringBuilder clockBoard = new StringBuilder();
@@ -32,6 +52,9 @@ public class BoardsAndMenusHandler {
         System.out.println(clockBoard);
     }
 
+    /**
+     * Prints the search menu with options to search for train departures based on various criteria
+     */
     public void printSearchMenu() {
 
         System.out.println("""
@@ -50,6 +73,9 @@ public class BoardsAndMenusHandler {
 
     }
 
+    /**
+     * Prints the edit menu with options to edit different attributes of a train departure
+     */
     public void printEditMenu() {
         System.out.println("""
                 +--Edit menu-------------------------------------------------------------------------------------------------------+
@@ -66,6 +92,9 @@ public class BoardsAndMenusHandler {
 
     }
 
+    /**
+     * Prints the remove menu with options to remove train departures based on different criteria
+     */
     public void printRemoveMenu() {
         System.out.println("""
                 +--Remove menu-----------------------------------------------------------------------------------------------------+
@@ -80,6 +109,10 @@ public class BoardsAndMenusHandler {
                 	  """);
     }
 
+    /**
+     * Prints the main menu with options for various operations like adding, searching, editing,
+     * and removing train departures, as well as viewing the time board and seeking help.
+     */
     public void printMenu() {
         System.out.println("""
                 +--Main menu-------------------------------------------------------------------------------------------------------+
@@ -95,6 +128,9 @@ public class BoardsAndMenusHandler {
                 	  """);
     }
 
+    /**
+     * Prints a welcome message with instructions and guidelines for using the train dispatch application
+     */
     public void printWelcomeMessage() {
 
         System.out.println("""
@@ -112,5 +148,4 @@ public class BoardsAndMenusHandler {
                 	""");
 
     }
-
 }
