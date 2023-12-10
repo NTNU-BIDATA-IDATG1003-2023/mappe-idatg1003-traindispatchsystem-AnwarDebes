@@ -12,11 +12,13 @@ public class Register {
     private Set<TrainDeparture> trainDepartures;
 
     private List<TrainDeparture> results;
+    private Map<String, String> laneMap;
 
 
     public Register() {
         results = new ArrayList<>();
         trainDepartures = new HashSet<>();
+        laneMap = new HashMap<>();
     }
 
     public Set<TrainDeparture> getTrainDepartures() {
@@ -25,6 +27,22 @@ public class Register {
             return trainDepartures;
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("List is empty");
+        }
+    }
+    public Map<String, String> getLaneMap() {
+        try {
+            CheckValid.checkMap(laneMap);
+            return laneMap;
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("List is empty");
+        }
+    }
+    public Set<String> getLaneList() {
+        try {
+            CheckValid.checkMap(laneMap);
+            return laneMap.keySet();
+        } catch (IllegalArgumentException e) {
+            throw new NullPointerException("List is empty");
         }
     }
 
@@ -42,6 +60,7 @@ public class Register {
             }
         });
         trainDepartures.add(trainDeparture);
+        laneMap.put(trainDeparture.getDestination().toLowerCase(), trainDeparture.getLine().toLowerCase());
         return true;
     }
 
@@ -122,10 +141,10 @@ public class Register {
     }
 
     private LocalTime calculateTheTotalTimeToDeparture(TrainDeparture trainDeparture) {
-        String[] delay = trainDeparture.getDelay().split(":");
+        String[] delay = trainDeparture.getDelay().toString().split(":");
         int delayHours = Integer.parseInt(delay[0]);
         int delayMinutes = Integer.parseInt(delay[1]);
-        return LocalTime.parse(trainDeparture.getDepartureTime()).plusHours(delayHours).plusMinutes(delayMinutes);
+        return trainDeparture.getDepartureTime().plusHours(delayHours).plusMinutes(delayMinutes);
     }
 
     public boolean removeTrainDeparturesWithTime(String departureTime, int index) {
@@ -188,7 +207,7 @@ public class Register {
 
     public List<TrainDeparture> sortTrainDepartures() {
         return  trainDepartures.stream().sorted(
-                Comparator.comparing(trainDeparture -> LocalTime.parse(trainDeparture.getDepartureTime()))).collect(Collectors.toCollection(ArrayList::new));
+                Comparator.comparing(trainDeparture -> trainDeparture.getDepartureTime())).collect(Collectors.toCollection(ArrayList::new));
     }
 
 
@@ -196,8 +215,8 @@ public class Register {
         results.clear();
         if (CheckValid.checkValidString(departureTime, "Departure time needs to be a string")) {
             results = trainDepartures.stream()
-                    .filter(trainDeparture -> LocalTime.parse
-                            (trainDeparture.getDepartureTime()).equals(LocalTime.parse(departureTime)))
+                    .filter(trainDeparture ->
+                            trainDeparture.getDepartureTime().equals(LocalTime.parse(departureTime)))
                     .collect(Collectors.toCollection(ArrayList::new));
             if(!results.isEmpty()) {
                 return results;

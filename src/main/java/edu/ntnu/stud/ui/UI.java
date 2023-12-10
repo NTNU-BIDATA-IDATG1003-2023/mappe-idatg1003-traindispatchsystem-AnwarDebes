@@ -6,8 +6,10 @@ import edu.ntnu.stud.entity.TrainDeparture;
 import edu.ntnu.stud.register.Register;
 
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 public class UI {
 
@@ -23,6 +25,8 @@ public class UI {
     private BoardsAndMenusHandler boardsAndMenusHandler;
 
     private UserInputHandler inputHandler;
+    boolean hasTrack ;
+    boolean hasDelay ;
 
 
     public UI() {
@@ -39,9 +43,9 @@ public class UI {
         inputHandler = new UserInputHandler(reader);
         parser = new Parser(inputHandler);
         // remove this when done
-        TrainDeparture t1 = new TrainDeparture("12:10", "L1", 1, "Oslo", 1, "00:00");
-        TrainDeparture t2 = new TrainDeparture("12:20", "L2", 2, "Stavanger", 2, "00:00");
-        TrainDeparture t3 = new TrainDeparture("12:30", "L4", 3, "Trondheim", 3, "00:00");
+        TrainDeparture t1 = new TrainDeparture(LocalTime.parse("12:10"), "L1", 1, "Oslo", 1, LocalTime.parse("00:00"));
+        TrainDeparture t2 = new TrainDeparture(LocalTime.parse("12:20"), "L2", 2, "Stavanger", 2, LocalTime.parse("00:00"));
+        TrainDeparture t3 = new TrainDeparture(LocalTime.parse("12:30"), "L4", 3, "Trondheim", 3, LocalTime.parse("00:00"));
         register.addTrainDeparture(t1);
         register.addTrainDeparture(t2);
         register.addTrainDeparture(t3);
@@ -208,7 +212,7 @@ public class UI {
         String newDelay = inputHandler.getTimeInput
                 ("Enter new delay: ", "Delay needs to be in format hh:mm");
         register.getTrainDepartures().remove(trainDeparture);
-        trainDeparture.setDelay(newDelay);
+        trainDeparture.setDelay(LocalTime.parse(newDelay));
         try {
             register.addTrainDeparture(trainDeparture);
             System.out.println("Delay changed successfully ");
@@ -261,7 +265,7 @@ public class UI {
         String newDepartureTime = inputHandler.getTimeInput
                 ("Enter new departure time: ", "Time needs to be in format hh:mm");
         register.getTrainDepartures().remove(trainDeparture);
-        trainDeparture.setDepartureTime(newDepartureTime);
+        trainDeparture.setDepartureTime(LocalTime.parse(newDepartureTime));
         try {
             register.addTrainDeparture(trainDeparture);
             System.out.println("Departure time changed successfully ");
@@ -439,11 +443,7 @@ public class UI {
         }
         boardsAndMenusHandler.printSearchMenu();
     }
-
-    private void addTrainDeparture() {
-
-        boolean hasTrack = false;
-        boolean hasDelay = false;
+    private void handelTrackAndDelayResponse(){
         String hasTrackResponse =
                 inputHandler.checkResponseInput("y", "n", "Does the train have a track? (y/n): "
                         , "Please enter y or n");
@@ -456,6 +456,12 @@ public class UI {
         if (hasDelayResponse.equals("y")) {
             hasDelay = true;
         }
+    }
+
+    private void addTrainDeparture() {
+        hasTrack = false;
+        hasDelay = false;
+        handelTrackAndDelayResponse();
         String destination = inputHandler.checkStringInput
                 (stationName, stationName, "Enter destination: "
                         , "Destination needs to be a valid name and needs to be " +
@@ -465,22 +471,11 @@ public class UI {
         int trainNumber = inputHandler.getIntInput
                 ("Enter train number: ", "Train number needs to be a positive number"
                         + " and not already exist");
-
-        String line = inputHandler.getStringInput
-                ("Enter line: ", "Line cant be empty or blank and needs to be equal "
-                        + "or less then 20 characters");
-        int track = -1;
-        if (hasTrack) {
-            track = inputHandler.getIntInput
-                    ("Enter track: ", "Track needs to be a positive number");
-        }
-        String delay = "00:00";
-        if (hasDelay) {
-            delay = inputHandler.getTimeInput
-                    ("Enter delay: ", "Delay needs to be in format hh:mm");
-        }
+        String lane = handleLaneInput(destination);
+        int track = handelTrackInput(hasTrack);
+        String delay = handelDelayInput(hasDelay);
         TrainDeparture trainDeparture =
-                new TrainDeparture(departureTime, line, trainNumber, destination, track, delay);
+                new TrainDeparture(LocalTime.parse(departureTime), lane, trainNumber, destination, track, LocalTime.parse(delay));
         try {
             register.addTrainDeparture(trainDeparture);
             System.out.println("Train departure added");
@@ -498,6 +493,43 @@ public class UI {
             System.err.println("Train departure was not added because it was not valid");
         }
         boardsAndMenusHandler.printMenu();
+    }
+
+    private String handelDelayInput(boolean hasDelay) {
+        String delay = "00:00";
+        if (hasDelay) {
+            delay = inputHandler.getTimeInput
+                    ("Enter delay: ", "Delay needs to be in format hh:mm");
+        }
+        return delay;
+    }
+
+    private int handelTrackInput(boolean hasTrack) {
+        int track = -1;
+        if (hasTrack) {
+            track = inputHandler.getIntInput
+                    ("Enter track: ", "Track needs to be a positive number");
+        }
+        return track;
+    }
+
+    private String handleLaneInput(String destination) {
+        String lane;
+        try{
+            Set<String> departuresWithLanes = register.getLaneList();
+            if(departuresWithLanes.contains(destination.toLowerCase())){
+                lane = register.getLaneMap().get(destination.toLowerCase()).toUpperCase();
+            }else{
+                lane = inputHandler.getStringInput
+                        ("Enter lane: ", "Line cant be empty or blank and needs to be equal "
+                                + "or less then 20 characters");
+            }
+        }catch (NullPointerException e){
+                lane = inputHandler.getStringInput
+                        ("Enter lane: ", "Line cant be empty or blank and needs to be equal "
+                                + "or less then 20 characters");
+            }
+        return lane;
     }
 
     private void getTrainDepartureWithDestination() {

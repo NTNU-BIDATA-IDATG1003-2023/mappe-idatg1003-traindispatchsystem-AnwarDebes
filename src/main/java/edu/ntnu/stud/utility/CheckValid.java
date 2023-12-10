@@ -3,6 +3,7 @@ package edu.ntnu.stud.utility;
 import edu.ntnu.stud.entity.TrainDeparture;
 
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -94,5 +95,11 @@ public  class CheckValid {
 	}
 	public static boolean checkIfThereIsTrack(int track) {
 	  return track != -1;
+	}
+
+	public static void checkMap(Map<String, String> laneMap) {
+	  if (laneMap.isEmpty() || laneMap == null) {
+		throw new IllegalArgumentException("Map is empty");
+	  }
 	}
 }

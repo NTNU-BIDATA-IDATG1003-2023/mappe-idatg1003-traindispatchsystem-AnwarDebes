@@ -6,26 +6,29 @@ import edu.ntnu.stud.entity.TrainDeparture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
+
 class TrainDepartureTest {
   TrainDeparture trainDeparture;
   @BeforeEach
     void setUp() {
-     trainDeparture = new TrainDeparture("10:15", "L1", 1, "Oslo", 1, "00:00");
+     trainDeparture = new TrainDeparture(LocalTime.parse("10:15"), "L1", 1, "Oslo", 1, LocalTime.parse("00:00"));
   }
 
   @Test
   void setDepartureTimePositiv() {
-    trainDeparture.setDepartureTime("21:15");
-        assertEquals("21:15", trainDeparture.getDepartureTime());
+    trainDeparture.setDepartureTime(LocalTime.parse("21:15"));
+        assertEquals("21:15", trainDeparture.getDepartureTime().toString());
 
   }
   @Test
   void setDepartureTimeNegativ() {
     try {
-      trainDeparture.setDepartureTime("21:15:00");
+      trainDeparture.setDepartureTime( LocalTime.parse("25:15"));
       fail("Should throw exception");
-      }catch (IllegalArgumentException e) {
-      assertEquals("Times needs to be in the form of hh:mm", e.getMessage());
+      }catch (DateTimeParseException e) {
+      assertEquals("Text '25:15' could not be parsed: Invalid value for HourOfDay (valid values 0 - 23): 25", e.getMessage());
     }
 
   }
@@ -93,25 +96,16 @@ class TrainDepartureTest {
 
   @Test
   void setDelayPositiv() {
-    trainDeparture.setDelay("23:59");
-    assertEquals("23:59", trainDeparture.getDelay());
+    trainDeparture.setDelay( LocalTime.parse("23:59"));
+    assertEquals("23:59", trainDeparture.getDelay().toString());
   }
   @Test
   void setDelayNegative() {
     try {
-      trainDeparture.setDelay("25:30");
+      trainDeparture.setDelay( LocalTime.parse("25:30"));
       fail("Should throw exception");
-    }catch (IllegalArgumentException e) {
-        assertEquals("Times needs to be in the form of hh:mm", e.getMessage());
-    }
-  }
-  @Test
-  void setDelayNegative2() {
-    try {
-      trainDeparture.setDelay("dhfjgdf");
-      fail("Should throw exception");
-    }catch (IllegalArgumentException e) {
-        assertEquals("Times needs to be in the form of hh:mm", e.getMessage());
+    }catch (DateTimeParseException e) {
+        assertEquals("Text '25:30' could not be parsed: Invalid value for HourOfDay (valid values 0 - 23): 25", e.getMessage());
     }
   }
 }

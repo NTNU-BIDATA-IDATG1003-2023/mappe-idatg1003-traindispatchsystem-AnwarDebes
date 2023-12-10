@@ -14,7 +14,7 @@ import java.time.LocalTime;
  */
 public class TrainDeparture {
 
-  private String departureTime;
+  private LocalTime departureTime;
 
   private String line;
 
@@ -24,7 +24,7 @@ public class TrainDeparture {
 
   private int track;
 
-  private String delay;
+  private LocalTime delay;
 
 	/**
 	 * Constructs a new TrainDeparture instance with the specified details.
@@ -36,8 +36,8 @@ public class TrainDeparture {
 	 * @param track         The track from which the train departs.
 	 * @param delay         The delay of the train in the format hh:mm.
 	 */
-  public TrainDeparture(String departureTime, String line, int trainNumber, String destination, int track,
-						String delay) {
+  public TrainDeparture(LocalTime departureTime, String line, int trainNumber, String destination, int track,
+						LocalTime delay) {
 	setDepartureTime(departureTime);
 	setLine(line);
 	setTrainNumber(trainNumber);
@@ -51,7 +51,7 @@ public class TrainDeparture {
 	 *
 	 * @return The departure time in the format hh:mm.
 	 */
-  public String getDepartureTime() {
+  public LocalTime getDepartureTime() {
 
 	return departureTime;
   }
@@ -61,11 +61,11 @@ public class TrainDeparture {
 	 *
 	 * @param departureTime The departure time in the format hh:mm.
 	 */
-  public void setDepartureTime(String departureTime) {
+  public void setDepartureTime(LocalTime departureTime) {
 
-	if (CheckValid.checkValidString(departureTime, "Time needs to be a string") &&
+	if (CheckValid.checkValidString(String.valueOf(departureTime), "Time needs to be a string") &&
 		CheckValid.checkValidTime
-			(departureTime, "Times needs to be in the form of hh:mm")) {
+			(String.valueOf(departureTime), "Times needs to be in the form of hh:mm")) {
 	  this.departureTime = departureTime;
 	}
   }
@@ -164,7 +164,7 @@ public class TrainDeparture {
 	 *
 	 * @return The delay in the format hh:mm.
 	 */
-  public String getDelay() {
+  public LocalTime getDelay() {
 
 	return delay;
   }
@@ -174,10 +174,10 @@ public class TrainDeparture {
 	 *
 	 * @param delay The delay of the train. It must be a valid string in the format hh:mm.
 	 */
-  public void setDelay(String delay) {
+  public void setDelay(LocalTime delay) {
 
-	if (CheckValid.checkValidString(delay, "delay needs to be a valid string") &&
-		CheckValid.checkValidTime(delay, "Times needs to be in the form of hh:mm")) {
+	if (CheckValid.checkValidString(String.valueOf(delay), "delay needs to be a valid string") &&
+		CheckValid.checkValidTime(String.valueOf(delay), "Times needs to be in the form of hh:mm")) {
 	  this.delay = delay;
 	}
   }
@@ -189,12 +189,12 @@ public class TrainDeparture {
 	 */
   public String display() {
 	StringBuilder sb = new StringBuilder();
-	sb.append("| " + departureTime).append(" ".repeat(15 - departureTime.length())).append("|");
+	sb.append("| " + departureTime).append(" ".repeat(15 - String.valueOf(departureTime).length())).append("|");
 	sb.append(" " + line).append(" ".repeat(21 - line.length())).append("|");
 	  sb.append(" " + trainNumber).append(" ".repeat(13- String.valueOf(trainNumber).length())).append("|");
 	sb.append(" " + destination).append(" ".repeat(21 - destination.length())).append("|");
-	if(CheckValid.checkIfThereIsDelay(LocalTime.parse(delay))) {
-		sb.append(" " + delay).append(" ".repeat(6 - delay.length())).append("|");
+	if(CheckValid.checkIfThereIsDelay(delay)) {
+		sb.append(" " + delay).append(" ".repeat(6 - String.valueOf(delay).length())).append("|");
 	}else{
 		sb.append(" " ).append(" ".repeat(6 )).append("|");
 	}
