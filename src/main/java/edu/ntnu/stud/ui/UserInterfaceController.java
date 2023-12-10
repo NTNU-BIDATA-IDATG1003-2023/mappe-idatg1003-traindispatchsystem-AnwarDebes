@@ -17,8 +17,8 @@ import java.util.Set;
 
 /**
  * The UserInterface class manages the user interface for a train dispatch application.
- * It handles various user interactions such as displaying menus, adding or removing train departures
- * and handling user inputs.
+ * It handles various user interactions such as displaying menus, adding or removing train
+ * departures and handling user inputs.
  *
  * @author Anwar Debes
  * @version 0.0.1
@@ -48,23 +48,24 @@ public class UserInterfaceController
     // The clock that displays the current time
     private String clock;
     // The name of the station
-    private String  stationName;
+    private String stationName;
     // The handler that handles the display of various user interface components
     private UserInterfaceView userInterfaceView;
     // The handler that handles user input
     private UserInputHandler inputHandler;
 
     /**
-     * Empty constructor for the user interface class
+     * Empty constructor for the user interface class.
      */
     public UserInterfaceController()
     {
-
+        // empty constructor, no need to initialize anything
 
     }
 
     /**
-     * Initializes the user interface by creating a new register, scanner, parser, and boardsAndMenusHandler
+     * Initializes the user interface by creating a new register, scanner, parser,
+     *     and boardsAndMenusHandler.
      */
     public void init()
     {
@@ -90,7 +91,7 @@ public class UserInterfaceController
 
     /**
      * Starts the application by displaying a welcome message, printing the main menu, and
-     * handling user input
+     * handling user input.
      */
 
     public void start()
@@ -156,7 +157,7 @@ public class UserInterfaceController
 
         boolean wantToQuit = false;
 
-        MainMenuCommands commandInput = command.getCommandInput();
+        MainMenuCommands commandInput = command.getMainCommandInput();
 
         switch (commandInput)
         {
@@ -167,11 +168,11 @@ public class UserInterfaceController
             case EDIT -> editMenu();
             case REMOVE -> removeMenu();
             case TIME -> handelTime();
-            case HELP -> userInterfaceView.printMenu();
+            case HELP -> userInterfaceView.printWelcomeMessage();
             case QUIT -> wantToQuit = true;
             default ->
             {
-                System.err.println("Please enter a valid number from menu");
+                System.err.println("Please enter a valid number as shown in the menu");
                 mainMenu();
             }
         }
@@ -179,20 +180,22 @@ public class UserInterfaceController
     }
 
     /**
-     * Handles the time input from the user and displays the clock and the main menu
+     * Handles the time input from the user and displays the clock and the main menu.
      */
     private void handelTime()
     {
 
         String wantsToChangeTime =
-            inputHandler.getStringInput("Do you want to change the time? (y/n):",
-                "Please enter y or n");
+            inputHandler.checkResponseInput("y", "n",
+                "Do you want to change the time? (y/n):",
+                "Please enter y(yes) or n(no)");
         if (wantsToChangeTime.equals("y"))
         {
             clock =
-                inputHandler.getClockInput("Enter new time: ", "Time needs to be in format hh:mm",
+                inputHandler.getClockInput("Enter new time: ",
+                    "Time needs to be in format HH:MM",
                     clock);
-            register.removeTrainDepartures(clock);
+            register.removeTrainDepartureByTime(clock);
             userInterfaceView.printClock(clock);
             userInterfaceView.printMenu();
         } else
@@ -203,7 +206,7 @@ public class UserInterfaceController
     }
 
     /**
-     * Removes train departures using various criteria selected from the remove menu
+     * Removes train departures using various criteria selected from the remove menu.
      */
     public void removeMenu()
     {
@@ -218,7 +221,7 @@ public class UserInterfaceController
     }
 
     /**
-     * Processes the command selected from the remove menu
+     * Processes the command selected from the remove menu.
      *
      * @param command The command to be processed
      * @return true if the user chooses to go back, otherwise false
@@ -241,7 +244,7 @@ public class UserInterfaceController
             case EXIT -> System.exit(0);
             default ->
             {
-                System.err.println("Please enter a valid number from menu");
+                System.err.println("Please enter a valid number as shown in the  menu");
                 removeMenu();
             }
 
@@ -250,12 +253,13 @@ public class UserInterfaceController
     }
 
     /**
-     * Displays and handles the edit menu for modifying train departure details
+     * Displays and handles the edit menu for modifying train departure details.
      */
     public void editMenu()
     {
-        int trainNumber = inputHandler.getIntInput("Enter train number: ",
-            "Train number needs to be a positive number");
+        int trainNumber = inputHandler.getIntInput(
+            "Enter train number for the wanted departure(s): ",
+            "Train number needs to be a positive number and not already exist");
         List<TrainDeparture> trainDepartures = register.getTrainDepartureWithNumber(trainNumber);
 
         TrainDeparture trainDeparture =
@@ -273,7 +277,7 @@ public class UserInterfaceController
     /**
      * Processes the command selected from the edit menu.
      *
-     * @param command The command to be processed
+     * @param command        The command to be processed
      * @param trainDeparture The train departure object to be edited
      * @return true if the user chooses to go back, otherwise false
      */
@@ -311,18 +315,21 @@ public class UserInterfaceController
     private void editDelay(TrainDeparture trainDeparture)
     {
         String newDelay =
-            inputHandler.getTimeInput("Enter new delay: ", "Delay needs to be in format hh:mm");
+            inputHandler.getTimeInput("Enter new delay: ",
+                "Delay time needs to be in format hh:mm");
         register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setDelay(LocalTime.parse(newDelay));
         try
         {
-            register.addTrainDeparture(trainDeparture);
-            System.out.println("Delay changed successfully ");
+            if (register.addTrainDeparture(trainDeparture))
+            {
+                System.out.println("Delay changed successfully ");
+            }
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException f)
         {
             System.err.println(
                 "Editing the delay was not successful, because the changes you made "
-                    + "resulted in a train departure that was not valid");
+                    + "resulted in a train departure that is not valid");
             register.addTrainDeparture(trainDeparture);
         }
         userInterfaceView.printEditMenu();
@@ -337,9 +344,9 @@ public class UserInterfaceController
     {
 
         String newLine =
-            inputHandler.getStringInput("Enter new line: ", "Line cant be empty or blank");
+            inputHandler.getStringInput("Enter new line: ", "Lane cant be empty or blank");
         register.getTrainDepartures().remove(trainDeparture);
-        trainDeparture.setLine(newLine);
+        trainDeparture.setLane(newLine);
         try
         {
             register.addTrainDeparture(trainDeparture);
@@ -347,8 +354,8 @@ public class UserInterfaceController
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException f)
         {
             System.err.println(
-                "Editing the Lane was not successful, because the changes you made " +
-                    "resulted in a train departure that was not valid");
+                "Editing the Lane was not successful, because the changes you made "
+                    + "resulted in a train departure that wasn't valid");
             register.addTrainDeparture(trainDeparture);
         }
         userInterfaceView.printEditMenu();
@@ -363,7 +370,8 @@ public class UserInterfaceController
     {
 
         int newTrack =
-            inputHandler.getTrackInput("Enter new track: ", "Track needs to be a positive number");
+            inputHandler.getTrackInput("Enter new track: ",
+                "Track number needs to be a positive number");
         register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setTrack(newTrack);
         try
@@ -373,8 +381,8 @@ public class UserInterfaceController
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException f)
         {
             System.err.println(
-                "Editing the track was not successful, because the changes you made " +
-                    "resulted in a train departure that was not valid");
+                "Editing the track was not successful, because the changes you made "
+                    + "resulted in a train departure that isn't valid");
             register.addTrainDeparture(trainDeparture);
         }
         userInterfaceView.printEditMenu();
@@ -388,7 +396,7 @@ public class UserInterfaceController
     private void editDepartureTime(TrainDeparture trainDeparture)
     {
         String newDepartureTime = inputHandler.getTimeInput("Enter new departure time: ",
-            "Time needs to be in format hh:mm");
+            "Time needs to be in format HH:MM");
         register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setDepartureTime(LocalTime.parse(newDepartureTime));
         try
@@ -398,8 +406,8 @@ public class UserInterfaceController
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException f)
         {
             System.err.println(
-                "Editing the departure time was not successful, because the changes you made " +
-                    "resulted in a train departure that was not valid");
+                "Editing the departure time was not successful, because the changes you made "
+                    + "resulted in a train departure that wasn't valid");
             register.addTrainDeparture(trainDeparture);
         }
         userInterfaceView.printEditMenu();
@@ -413,7 +421,7 @@ public class UserInterfaceController
     private void editDestination(TrainDeparture trainDeparture)
     {
         String newDestination = inputHandler.getStringInput("Enter new destination: ",
-            "Destination needs to be a valid name");
+            "Destination needs to be a valid name and not empty or blank");
         register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setDestination(newDestination);
         try
@@ -423,8 +431,8 @@ public class UserInterfaceController
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException f)
         {
             System.err.println(
-                "Editing the destination was not successful, because the changes you made " +
-                    "resulted in a train departure that was not valid");
+                "Editing the destination was not successful, because the changes you made "
+                    + "resulted in a train departure that was not valid");
             register.addTrainDeparture(trainDeparture);
         }
         userInterfaceView.printEditMenu();
@@ -438,7 +446,7 @@ public class UserInterfaceController
     private void editTrainNumber(TrainDeparture trainDeparture)
     {
         int newTrainNumber = inputHandler.getIntInput("Enter new train number: ",
-            "Train number needs to be a positive number");
+            "Train number needs to be a positive number and not already exist");
         register.getTrainDepartures().remove(trainDeparture);
         trainDeparture.setTrainNumber(newTrainNumber);
         try
@@ -448,8 +456,8 @@ public class UserInterfaceController
         } catch (IllegalArgumentException | IllegalStateException | NullPointerException f)
         {
             System.err.println(
-                "Editing the train number was not successful, because the changes you made " +
-                    "resulted in a train departure that was not valid");
+                "Editing the train number was not successful, because the changes you made "
+                    + "resulted in a train departure that was not valid");
             register.addTrainDeparture(trainDeparture);
         }
         userInterfaceView.printEditMenu();
@@ -484,14 +492,13 @@ public class UserInterfaceController
         SearchCommands commandInput = command.getSearchCommandInput();
         switch (commandInput)
         {
-            case UNKNOWN -> System.out.println();
+            case UNKNOWN -> System.err.println("No command here, please try a higher number!");
             case NUMBER -> getTrainDepartureWithNumber();
             case DEPARTURE -> getTrainDepartureWithDestination();
             case DEPARTURE_TIME -> getTrainDepartureWithDepartureTime();
             case TRACK -> getTrainDepartureWithTrack();
             case LANE -> getTrainDepartureWithLine();
             case DELAY -> getTrainDepartureWithDelay();
-            case HELP -> userInterfaceView.printSearchMenu();
             case BACK -> goBack = true;
             case QUIT -> System.exit(0);
             default ->
@@ -504,7 +511,7 @@ public class UserInterfaceController
     }
 
     /**
-     * Checks if the list of train departures is empty
+     * Checks if the list of train departures is empty.
      *
      * @return true if the list is not empty, false otherwise
      */
@@ -532,7 +539,8 @@ public class UserInterfaceController
     {
 
         String departureTime =
-            inputHandler.getTimeInput("Enter departure time: ", "Time needs to be in format hh:mm");
+            inputHandler.getTimeInput("Enter departure time:  ",
+                "Departure time needs to be in format hh:mm");
         if (checkIfTrainDepartureListIsEmpty())
         {
             try
@@ -544,7 +552,7 @@ public class UserInterfaceController
                     .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e)
             {
-                System.err.println("Train departure(s) was not found");
+                System.err.println("Train departure(s) was not found, try again");
             }
         }
         userInterfaceView.printSearchMenu();
@@ -561,7 +569,8 @@ public class UserInterfaceController
     {
 
         int track =
-            inputHandler.getTrackInput("Enter track: ", "Track needs to be a positive number");
+            inputHandler.getTrackInput("Enter track number: ",
+                "Track needs to be a positive number, please try again");
         if (checkIfTrainDepartureListIsEmpty())
         {
             try
@@ -573,7 +582,7 @@ public class UserInterfaceController
                     .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e)
             {
-                System.err.println("Train departure(s) was not found");
+                System.err.println("Train departure(s) was not found, please try again");
             }
         }
         userInterfaceView.printSearchMenu();
@@ -600,7 +609,7 @@ public class UserInterfaceController
                     .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e)
             {
-                System.err.println("Train departure(s) was not found");
+                System.err.println("Train departure(s) was not found, try again");
             }
         }
         userInterfaceView.printSearchMenu();
@@ -629,7 +638,8 @@ public class UserInterfaceController
                     .forEach(trainDeparture -> System.out.println(trainDeparture.display()));
             } catch (IllegalArgumentException e)
             {
-                System.err.println("Train departure(s) was not found");
+                System.err.println("Train departure(s) was not found, try again with different "
+                    + "input");
             }
         }
         userInterfaceView.printSearchMenu();
@@ -645,8 +655,8 @@ public class UserInterfaceController
     private void getTrainDepartureWithNumber()
     {
 
-        int trainNumber = inputHandler.getIntInput("Enter train number: ",
-            "Train number needs to be a positive number");
+        int trainNumber = inputHandler.getIntInput("Enter train(s) number(s): ",
+            "Train number needs to be a positive number, please try again");
         if (checkIfTrainDepartureListIsEmpty())
         {
             try
@@ -665,7 +675,7 @@ public class UserInterfaceController
     }
 
     /**
-     * Handles user responses for track and delay while adding a train departure
+     * Handles user responses for track and delay while adding a train departure.
      */
     private void handelTrackAndDelayResponse()
     {
@@ -687,9 +697,9 @@ public class UserInterfaceController
 
     /**
      * Adds a new train departure based on user input and displays the train departure board
-     * with the new train departure added to it. If the train departure is not valid, it is not added.
-     * If the train departure already exists, it is not added. If the train departure is added, the
-     * train departure board is displayed.
+     * with the new train departure added to it. If the train departure is not valid, it is not
+     * added. If the train departure already exists, it is not added. If the train departure is
+     * added, the train departure board is displayed.
      */
     private void addTrainDeparture()
     {
@@ -697,9 +707,9 @@ public class UserInterfaceController
         hasDelay = false;
         handelTrackAndDelayResponse();
         String destination =
-            inputHandler.checkStringInput(stationName, stationName, "Enter destination: ",
-                "Destination needs to be a valid name and needs to be " +
-                    "equal or less then 20 characters");
+            inputHandler.checkStringInput(stationName, stationName, "Enter destination name: ",
+                "Destination needs to be a valid name and needs to be "
+                    + "equal or less then 20 characters");
         String departureTime =
             inputHandler.getTimeInput("Enter departure time: ", "Time needs to be in format hh:mm");
         int trainNumber = inputHandler.getIntInput("Enter train number: ",
@@ -720,12 +730,12 @@ public class UserInterfaceController
             System.out.println(trainDeparture.display());
         } catch (IllegalArgumentException e)
         {
-            System.err.println("Train departure was not added because a train " +
-                "departure with the given time and track already exists");
+            System.err.println("Train departure was not added because a train "
+                + "departure with the given time and track already exists");
         } catch (IllegalStateException e)
         {
-            System.err.println("Train departure was not added because a train " +
-                "departure with the given time and train number already exists");
+            System.err.println("Train departure was not added because a train "
+                + "departure with the given time and train number already exists");
         } catch (NullPointerException e)
         {
             System.err.println("Train departure was not added because it was not valid");
@@ -783,15 +793,15 @@ public class UserInterfaceController
                 lane = register.getLaneMap().get(destination.toLowerCase()).toUpperCase();
             } else
             {
-                lane = inputHandler.getStringInput("Enter lane: ",
-                    "Line cant be empty or blank and needs to be equal " +
-                        "or less then 20 characters");
+                lane = inputHandler.getStringInput("Enter departure lane: ",
+                    "Line cant be empty or blank and needs to be equal "
+                        + "or less then 20 characters");
             }
         } catch (NullPointerException e)
         {
             lane = inputHandler.getStringInput("Enter lane: ",
-                "Line cant be empty or blank and needs to be equal " +
-                    "or less then 20 characters");
+                "Line cant be empty or blank and needs to be equal "
+                    + "or less then 20 characters");
         }
         return lane;
     }
@@ -850,10 +860,11 @@ public class UserInterfaceController
     }
 
     /**
-     * Removes train departures based on departure time selected by the user from a list of train departures
-     * with the same departure time. If the list is empty, the user is returned to the remove menu. If the
-     * list is not empty, the user is prompted to choose a train departure from the list. If the user
-     * chooses a valid train departure, it is removed from the register.
+     * Removes train departures based on departure time selected by the user from a list
+     * of train departures with the same departure time. If the list is empty, the user is
+     * returned to the remove menu. If the list is not empty, the user is prompted to choose
+     * a train departure from the list. If the user chooses a valid train departure,
+     * it is removed from the register.
      */
     private void removeTrainDeparturesWithTime()
     {
@@ -868,7 +879,7 @@ public class UserInterfaceController
             {
                 register.removeTrainDeparturesWithTime(departureTime,
                     getChoiceFromResults(trainDepartures) - 1);
-                System.out.println("Train departures removed");
+                System.out.println("Train departures was successfully removed");
             } catch (IllegalArgumentException e)
             {
                 System.err.println("Train departures was not removed because time was not valid");
@@ -878,10 +889,10 @@ public class UserInterfaceController
     }
 
     /**
-     * Removes train departures based on track number selected by the user from a list of train departures
-     * with the same track number. If the list is empty, the user is returned to the remove menu. If the
-     * list is not empty, the user is prompted to choose a train departure from the list. If the user
-     * chooses a valid train departure, it is removed from the register.
+     * Removes train departures based on track number selected by the user from a list of train
+     * departures with the same track number. If the list is empty, the user is returned to the
+     * remove menu. If the list is not empty, the user is prompted to choose a train departure
+     * from the list. If the user chooses a valid train departure, it is removed from the register.
      */
     private void removeTrainDeparturesWithTrack()
     {
@@ -892,9 +903,11 @@ public class UserInterfaceController
             List<TrainDeparture> trainDepartures = register.getTrainDepartureWithTrack(track);
             try
             {
-                register.removeTrainDeparturesByTrack(track,
-                    getChoiceFromResults(trainDepartures) - 1);
-                System.out.println("Train departures removed");
+                if (register.removeTrainDeparturesByTrack(track,
+                    getChoiceFromResults(trainDepartures) - 1))
+                {
+                    System.out.println("Train departures was successfully removed");
+                }
             } catch (IllegalArgumentException e)
             {
                 System.err.println("Train departures was not removed because track was not valid");
@@ -906,7 +919,7 @@ public class UserInterfaceController
     /**
      * Removes train departures based on lane selected by the user from a list of train departures
      * with the same lane. If the list is empty, the user is returned to the remove menu. If the
-     * list is not empty, the user is prompted to choose a train departure from the list. If the user
+     * list is not empty, the user is prompted to choose a train departure from the list.If the user
      * chooses a valid train departure, it is removed from the register.
      */
     private void removeTrainDeparturesWithLane()
@@ -917,9 +930,11 @@ public class UserInterfaceController
             List<TrainDeparture> trainDepartures = register.getTrainDepartureWithLane(lane);
             try
             {
-                register.removeTrainDeparturesByLane(lane,
-                    getChoiceFromResults(trainDepartures) - 1);
-                System.out.println("Train departures removed");
+                if (register.removeTrainDeparturesByLane(lane,
+                    getChoiceFromResults(trainDepartures) - 1))
+                {
+                    System.out.println("Train departure is removed");
+                }
             } catch (IllegalArgumentException e)
             {
                 System.err.println("Train departures was not removed because lane was not valid");
@@ -929,10 +944,10 @@ public class UserInterfaceController
     }
 
     /**
-     * Removes train departures based on destination selected by the user from a list of train departures
-     * with the same destination. If the list is empty, the user is returned to the remove menu. If the
-     * list is not empty, the user is prompted to choose a train departure from the list. If the user
-     * chooses a valid train departure, it is removed from the register.
+     * Removes train departures based on destination selected by the user from a list of train
+     * departures with the same destination. If the list is empty, the user is returned to the
+     * remove menu. If the list is not empty, the user is prompted to choose a train departure
+     * from the list. If the user chooses a valid train departure, it is removed from the register.
      */
     private void removeTrainDeparturesWithDestination()
     {
@@ -944,9 +959,11 @@ public class UserInterfaceController
                 register.getTrainDepartureWithDestination(destination);
             try
             {
-                register.removeTrainDeparturesByDestination(destination,
-                    getChoiceFromResults(trainDepartures) - 1);
-                System.out.println("Train departures removed");
+                if (register.removeTrainDeparturesByDestination(destination,
+                    getChoiceFromResults(trainDepartures) - 1))
+                {
+                    System.out.println("Train departures removed");
+                }
             } catch (IllegalArgumentException e)
             {
                 System.err.println(
@@ -957,10 +974,10 @@ public class UserInterfaceController
     }
 
     /**
-     * Removes train departures based on train number selected by the user from a list of train departures
-     * with the same train number. If the list is empty, the user is returned to the remove menu. If the
-     * list is not empty, the user is prompted to choose a train departure from the list. If the user
-     * chooses a valid train departure, it is removed from the register.
+     * Removes train departures based on train number selected by the user from a list of train
+     * departures with the same train number. If the list is empty, the user is returned to the
+     * remove menu. If the list is not empty, the user is prompted to choose a train departure
+     * from the list. If the user chooses a valid train departure, it is removed from the register.
      */
     private void removeTrainDepartureWithNumber()
     {
@@ -972,9 +989,11 @@ public class UserInterfaceController
                 register.getTrainDepartureWithNumber(trainNumber);
             try
             {
-                register.removeTrainDepartures(trainNumber,
-                    getChoiceFromResults(trainDepartures) - 1);
-                System.out.println("Train departures removed");
+                if (register.removeTrainDepartureByNumber(trainNumber,
+                    getChoiceFromResults(trainDepartures) - 1))
+                {
+                    System.out.println("Train departures removed");
+                }
             } catch (IllegalArgumentException e)
             {
                 System.err.println(

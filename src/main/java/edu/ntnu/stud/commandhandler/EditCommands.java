@@ -11,8 +11,10 @@ public enum EditCommands
 {
     // A value for each command word along with its
     // corresponding user interface string.
-    UNKNOWN(0), DESTINATION(1), DEPARTURE_TIME(2), TRACK(3)
-    , DELAY(4), LANE(5), TRAIN_NUMBER(6),  BACK(7) , EXIT(8) ;
+    UNKNOWN(0), DESTINATION(1),
+    DEPARTURE_TIME(2), TRACK(3),
+    DELAY(4), LANE(5), TRAIN_NUMBER(6),
+    BACK(7), EXIT(8);
 
     // The command input of adjust menu.
     private final int adjustCommandInput;
@@ -22,10 +24,16 @@ public enum EditCommands
      *
      * @param adjustCommandInput The command input.
      */
-    private EditCommands(int adjustCommandInput)
+    EditCommands(int adjustCommandInput)
     {
         this.adjustCommandInput = adjustCommandInput;
     }
+
+    /**
+     * Returns the integer value associated with the command.
+     *
+     * @return the integer value of the command.
+     */
     public int getAdjustCommandInput()
     {
         return adjustCommandInput;

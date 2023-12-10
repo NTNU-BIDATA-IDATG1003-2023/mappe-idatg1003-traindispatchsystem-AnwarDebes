@@ -35,13 +35,13 @@ class TrainDepartureTest {
 
   @Test
   void setLinePositive() {
-    trainDeparture.setLine("L2");
-    assertEquals("L2", trainDeparture.getLine());
+    trainDeparture.setLane("L2");
+    assertEquals("L2", trainDeparture.getLane());
   }
   @Test
   void setLineNegative() {
     try {
-      trainDeparture.setLine("");
+      trainDeparture.setLane("");
       fail("Should throw exception");
     }catch (IllegalArgumentException e) {
         assertEquals("Line needs to be a string", e.getMessage());
@@ -49,7 +49,7 @@ class TrainDepartureTest {
   }
 
   @Test
-  void setTrainNumberPositiv() {
+  void setTrainNumberPositive() {
     trainDeparture.setTrainNumber(54);
     assertEquals(54, trainDeparture.getTrainNumber());
   }

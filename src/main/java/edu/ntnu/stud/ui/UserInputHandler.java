@@ -1,7 +1,6 @@
 package edu.ntnu.stud.ui;
 
 import edu.ntnu.stud.utility.CheckValid;
-
 import java.time.LocalTime;
 import java.util.Scanner;
 
@@ -20,9 +19,9 @@ public class UserInputHandler
     /**
      * constructor to reuse objects of scanner and printer massage class from smartHua class.
      *
-     * @param reader       gets scanner class from SmartHus class
+     * @param reader gets scanner class from SmartHus class
      */
-    public UserInputHandler(Scanner reader )
+    public UserInputHandler(Scanner reader)
     {
         this.reader = reader;
     }
@@ -44,8 +43,6 @@ public class UserInputHandler
     }
 
 
-
-
     public String getStringInput(String massage, String errorMassage)
     {
         String stringInput;
@@ -55,13 +52,14 @@ public class UserInputHandler
             System.out.print(massage);
 
             stringInput = reader.next();
-            if (CheckValid.checkValidString(stringInput,"") && stringInput.length() <= 20)
+            if (Boolean.TRUE.equals(CheckValid.checkValidString(stringInput, ""))
+                && stringInput.length() <= 20)
             {
                 stringValid = true;
 
             } else
             {
-                System.err.print(errorMassage  + "\n" + "> ");
+                System.err.print(errorMassage + "\n" + "> ");
 
 
             }
@@ -69,7 +67,9 @@ public class UserInputHandler
         } while (!stringValid);
         return stringInput;
     }
-    public String getTimeInput(String massage, String errorMassage) {
+
+    public String getTimeInput(String massage, String errorMassage)
+    {
         String stringInput;
         boolean stringValid = false;
         do
@@ -77,19 +77,25 @@ public class UserInputHandler
             System.out.print(massage);
 
             stringInput = reader.next();
-            try {
-                if (CheckValid.checkValidTime(stringInput, "") && stringInput.length() <= 20) {
+            try
+            {
+                if (Boolean.TRUE.equals(CheckValid.checkValidTime(stringInput, ""))
+                    && stringInput.length() <= 20)
+                {
                     stringValid = true;
 
                 }
-            } catch (IllegalArgumentException e){
-                    System.err.print(errorMassage  + "\n" + "> ");
-                }
+            } catch (IllegalArgumentException e)
+            {
+                System.err.print(errorMassage + "\n" + "> ");
+            }
 
         } while (!stringValid);
         return stringInput;
     }
-  public String getClockInput(String massage, String errorMassage, String oldTime) {
+
+    public String getClockInput(String massage, String errorMassage, String oldTime)
+    {
         String stringInput;
         boolean stringValid = false;
         do
@@ -97,22 +103,27 @@ public class UserInputHandler
             System.out.print(massage);
 
             stringInput = reader.next();
-            try {
-                if (CheckValid.checkValidTime(stringInput, "")
-                        && LocalTime.parse(stringInput).isAfter(LocalTime.parse(oldTime))) {
+            try
+            {
+                if (Boolean.TRUE.equals(CheckValid.checkValidTime(stringInput, ""))
+                    && LocalTime.parse(stringInput).isAfter(LocalTime.parse(oldTime)))
+                {
                     stringValid = true;
-                }else {
-                    System.err.println("New time cannot be before the current time, pleas try again");
+                } else
+                {
+                    System.err.println(
+                        "New time cannot be before the current time, pleas try again");
                 }
-            } catch (IllegalArgumentException e){
-                    System.err.print(errorMassage  + "\n" + "> ");
-                }
+            } catch (IllegalArgumentException e)
+            {
+                System.err.print(errorMassage + "\n" + "> ");
+            }
 
         } while (!stringValid);
         return stringInput;
     }
 
-    public int getIntInput(String massage, String errorMassage)
+    public int getIntInput(String massage, String errorMessage)
     {
         int intInput;
         boolean intValid = false;
@@ -121,15 +132,22 @@ public class UserInputHandler
             System.out.print(massage);
 
             intInput = readAndCheckIfInputInt();
-            if (CheckValid.checkValidInt(intInput))
+            try
             {
-                intValid = true;
+                if (Boolean.TRUE.equals(CheckValid.checkValidInt(intInput)))
+                {
+                    intValid = true;
+                }
+            } catch (IllegalArgumentException e)
+            {
+                System.err.print(errorMessage + "\n" + "> ");
             }
 
         } while (!intValid);
         return intInput;
     }
-    public int getTrackInput(String massage, String errorMassage)
+
+    public int getTrackInput(String massage, String errorMessage)
     {
         int intInput;
         boolean intValid = false;
@@ -138,9 +156,16 @@ public class UserInputHandler
             System.out.print(massage);
 
             intInput = readAndCheckIfInputInt();
-            if (CheckValid.checkValidTrackNumber(intInput, "Track needs to be a positive number"))
+            try
             {
-                intValid = true;
+                if (Boolean.TRUE.equals(CheckValid.checkValidTrackNumber(intInput,
+                    "Track needs to be a positive number")))
+                {
+                    intValid = true;
+                }
+            } catch (IllegalArgumentException e)
+            {
+                System.err.print(errorMessage + "\n" + "> ");
             }
 
         } while (!intValid);
@@ -148,44 +173,35 @@ public class UserInputHandler
     }
 
 
-
-    public int getCommandInput(String massage)
+    public String checkStringInput(String wantedInput, String unwantedInput, String massage,
+                                   String errorMassage)
     {
-        int intInput;
-        boolean intValid = false;
-        do
+        while (wantedInput.equalsIgnoreCase(unwantedInput))
         {
-            System.out.print(massage);
-
-            intInput = readAndCheckIfInputInt();
-            if (CheckValid.checkValidInt(intInput))
-            {
-                intValid = true;
-            }
-
-        } while (!intValid);
-        return intInput;
-    }
-
-    public String checkStringInput(String wantedInput, String unwantedInput, String massage, String errorMassage) {
-        while (wantedInput.equalsIgnoreCase(unwantedInput)) {
             wantedInput = getStringInput(massage, errorMassage);
-            if(wantedInput.equalsIgnoreCase(unwantedInput)){
-                System.err.println("The name of the destination cannot be the same as the current station name");
+            if (wantedInput.equalsIgnoreCase(unwantedInput))
+            {
+                System.err.println(
+                    "The name of the destination cannot be the same as the current station name");
             }
         }
         return wantedInput;
     }
 
-    public String checkResponseInput(String response1, String response2, String massage, String errorMassage) {
+    public String checkResponseInput(String response1, String response2, String massage,
+                                     String errorMassage)
+    {
         String response;
         boolean responseValid = false;
-        do {
+        do
+        {
             response = getStringInput(massage, errorMassage);
-            if (response.equalsIgnoreCase(response1) || response.equalsIgnoreCase(response2)) {
+            if (response.equalsIgnoreCase(response1) || response.equalsIgnoreCase(response2))
+            {
                 responseValid = true;
-            }else{
-                System.err.print(errorMassage  + "\n" + "> ");
+            } else
+            {
+                System.err.print(errorMassage + "\n" + "> ");
             }
         } while (!responseValid);
         return response;

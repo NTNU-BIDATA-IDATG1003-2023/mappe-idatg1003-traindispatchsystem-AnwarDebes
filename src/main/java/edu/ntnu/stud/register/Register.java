@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 /**
  * The Register class manages the registration and retrieval of train departure information.
- * It provides functionalities for adding, removing, and searching for train departures based on various attributes
- * like train number, departure time, track, lane, and delay. It also allows sorting of train departures and
- * manages a mapping of lanes to destinations.
+ * It provides functionalities for adding, removing, and searching for train departures based on
+ * various attributes like train number, departure time, track, lane, and delay.
+ * It also allows sorting of train departures and manages a mapping of lanes to destinations.
  *
  * @author Anwar Debes
  * @version 0.0.1
@@ -57,9 +57,10 @@ public class Register
             return trainDepartures;
         } catch (IllegalArgumentException e)
         {
-            throw new IllegalArgumentException("List is empty");
+            throw new IllegalArgumentException("Set is empty");
         }
     }
+
     /**
      * Retrieves the lane map which maps destinations to their respective lanes.
      *
@@ -101,9 +102,11 @@ public class Register
      *
      * @param trainDeparture The {@link TrainDeparture} object to add.
      * @return true if the train departure is successfully added.
-     * @throws NullPointerException if the train departure object is null.
-     * @throws IllegalStateException if a train departure with the same time and number already exists.
-     * @throws IllegalArgumentException if a train departure with the same time and track already exists.
+     * @throws NullPointerException     if the train departure object is null.
+     * @throws IllegalStateException    if a train departure with the same time and number already
+     *     exists.
+     * @throws IllegalArgumentException if a train departure with the same time and track already
+     *     exists.
      */
     public boolean addTrainDeparture(TrainDeparture trainDeparture)
     {
@@ -111,7 +114,8 @@ public class Register
         {
             throw new NullPointerException("Train departure can not be null");
         }
-        trainDepartures.forEach(trainDeparture1 -> {
+        trainDepartures.forEach(trainDeparture1 ->
+        {
             if (calculateTheTotalTimeToDeparture(trainDeparture1).equals(
                 calculateTheTotalTimeToDeparture(trainDeparture)))
             {
@@ -129,7 +133,7 @@ public class Register
         });
         trainDepartures.add(trainDeparture);
         laneMap.put(trainDeparture.getDestination().toLowerCase(),
-            trainDeparture.getLine().toLowerCase());
+            trainDeparture.getLane().toLowerCase());
         return true;
     }
 
@@ -151,7 +155,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Provided train number does not exist");
     }
 
     /**
@@ -164,7 +168,8 @@ public class Register
     public List<TrainDeparture> getTrainDepartureWithDestination(String destination)
     {
         if (Boolean.TRUE.equals(
-            CheckValid.checkValidString(destination, "Destination needs to be a string")))
+            CheckValid.checkValidString(destination,
+                "Destination needs to be a valid string")))
         {
             results = filterDeparturesByDestination(destination);
             if (!results.isEmpty())
@@ -172,7 +177,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Destination does not exist");
     }
 
     /**
@@ -185,7 +190,8 @@ public class Register
     public List<TrainDeparture> getTrainDepartureWithDepartureTime(String departureTime)
     {
         if (Boolean.TRUE.equals(
-            CheckValid.checkValidString(departureTime, "Departure time needs to be a string")))
+            CheckValid.checkValidString(departureTime,
+                "Departure time needs to be a string in format HH:MM")))
         {
             results = filterDeparturesByTime(departureTime);
             if (!results.isEmpty())
@@ -193,7 +199,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Departure time does not exist");
     }
 
     /**
@@ -206,7 +212,8 @@ public class Register
     public List<TrainDeparture> getTrainDepartureWithTrack(int track)
     {
         if (Boolean.TRUE.equals(Boolean.TRUE.equals(
-            CheckValid.checkValidTrackNumber(track, "Track needs to be a positive number"))))
+            CheckValid.checkValidTrackNumber(track,
+                "Track needs to be a positive number greater than 0"))))
         {
             results = filterDeparturesByTrack(track);
             if (!results.isEmpty())
@@ -214,7 +221,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Track number does not exist");
     }
 
     /**
@@ -227,7 +234,8 @@ public class Register
     public List<TrainDeparture> getTrainDepartureWithLane(String line)
     {
         if (Boolean.TRUE.equals(
-            Boolean.TRUE.equals(CheckValid.checkValidString(line, "Line needs to be a string"))))
+            Boolean.TRUE.equals(CheckValid.checkValidString(line,
+                "Lane needs to be a valid string"))))
         {
             results = filterDeparturesByLine(line);
             if (!results.isEmpty())
@@ -235,7 +243,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Lane does not exist");
     }
 
     /**
@@ -255,7 +263,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Delay does not exist");
     }
 
     /**
@@ -263,12 +271,14 @@ public class Register
      *
      * @param departureTime The cutoff departure time for removal.
      */
-    public void removeTrainDepartures(String departureTime)
+    public void removeTrainDepartureByTime(String departureTime)
     {
         if (Boolean.TRUE.equals(
-            CheckValid.checkValidString(departureTime, "Departure time needs to be a string")))
+            CheckValid.checkValidString(departureTime,
+                "Departure time needs to be a valid string")))
         {
-            trainDepartures.removeIf(trainDeparture -> {
+            trainDepartures.removeIf(trainDeparture ->
+            {
                 LocalTime departureTimeWithDelay = calculateTheTotalTimeToDeparture(trainDeparture);
                 return departureTimeWithDelay.isBefore(LocalTime.parse(departureTime));
             });
@@ -277,6 +287,7 @@ public class Register
 
     /**
      * Calculates the total time to departure for a given train departure.
+     *
      * @param trainDeparture The train departure to calculate the time to departure for.
      * @return the total time to departure.
      */
@@ -292,7 +303,7 @@ public class Register
      * Removes a specific train departure at a given index and time.
      *
      * @param departureTime The departure time to filter the departures.
-     * @param index The index of the departure to be removed from the filtered list.
+     * @param index         The index of the departure to be removed from the filtered list.
      */
     public void removeTrainDeparturesWithTime(String departureTime, int index)
     {
@@ -312,10 +323,10 @@ public class Register
      * Removes a specific train departure based on train number and index.
      *
      * @param trainNumber The train number to filter the departures.
-     * @param index The index of the departure to be removed from the filtered list.
+     * @param index       The index of the departure to be removed from the filtered list.
      * @return true if the removal was successful.
      */
-    public boolean removeTrainDepartures(int trainNumber, int index)
+    public boolean removeTrainDepartureByNumber(int trainNumber, int index)
     {
         if (Boolean.TRUE.equals(
             CheckValid.checkValidInt(trainNumber, "Train number needs to be a positive number")))
@@ -355,7 +366,8 @@ public class Register
 
     /**
      * Removes a specific train departure based on lane and index.
-     * @param line The lane to filter the departures
+     *
+     * @param line  The lane to filter the departures
      * @param index The index of the departure to be removed from the filtered list
      * @return true if the removal was successful
      */
@@ -374,10 +386,11 @@ public class Register
     }
 
     /**
-     * Removes a specific train departure based on the destination and its index in the filtered list.
+     * Removes a specific train departure based on the destination and its index in the
+     * filtered list.
      *
      * @param destination The destination to filter the departures.
-     * @param index The index of the departure to be removed from the filtered list.
+     * @param index       The index of the departure to be removed from the filtered list.
      * @return true if the removal was successful.
      */
     public boolean removeTrainDeparturesByDestination(String destination, int index)
@@ -430,7 +443,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Departure time does not exist");
     }
 
     /**
@@ -455,7 +468,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Track number does not exist");
     }
 
     /**
@@ -471,14 +484,14 @@ public class Register
         if (Boolean.TRUE.equals(CheckValid.checkValidString(line, "Line needs to be a string")))
         {
             results = trainDepartures.stream()
-                .filter(trainDeparture -> trainDeparture.getLine().equals(line))
+                .filter(trainDeparture -> trainDeparture.getLane().equals(line))
                 .collect(Collectors.toCollection(ArrayList::new));
             if (!results.isEmpty())
             {
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Lane does not exist");
     }
 
     /**
@@ -502,7 +515,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Destination does not exist");
     }
 
     /**
@@ -525,7 +538,7 @@ public class Register
                 return results;
             }
         }
-        throw new IllegalArgumentException("Train number does not exist");
+        throw new IllegalArgumentException("Delay does not exist");
     }
 
     /**
@@ -552,12 +565,14 @@ public class Register
     }
 
     /**
-     * Retrieves a specific train departure based on train number and its index in the filtered list.
+     * Retrieves a specific train departure based on train number and its index in the
+     * filtered list.
      *
      * @param trainNumber The train number to filter the departures.
-     * @param index The index in the filtered list of departures.
+     * @param index       The index in the filtered list of departures.
      * @return the {@link TrainDeparture} object at the specified index.
-     * @throws IllegalArgumentException if the index is out of bounds or the train number does not exist.
+     * @throws IllegalArgumentException if the index is out of bounds or the train number
+     *      does not exist.
      */
     public TrainDeparture getTrainDeparture(int trainNumber, int index)
     {

@@ -27,7 +27,7 @@ Register register;
   }
   @Test
   void getTrainDeparturesNegativ() {
-    register.removeTrainDepartures("19:00");
+    register.removeTrainDepartureByTime("19:00");
 
     try{
       register.getTrainDepartures();

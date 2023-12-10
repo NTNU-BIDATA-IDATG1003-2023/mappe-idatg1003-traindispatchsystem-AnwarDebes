@@ -7,6 +7,7 @@ import edu.ntnu.stud.ui.UserInputHandler;
  * The parser has a set of known command words. It checks user input against
  * the command word ordinal, and if the input is not one of the known commands, it
  * returns a command object that is marked as an unknown command.
+ *
  * @author Anwar Debes
  * @version 0.0.1
  */
@@ -37,10 +38,12 @@ public class Parser
     public Command getCommand()
     {
         int commandInput =
-            userInputHandler.getCommandInput("Please type a number as shown in menu:" + "\n" + "> ");
-        return new Command(commands.getCommandInput(commandInput),
-            commands.getAdjustCommandInput(commandInput),
-            commands.getSearchForItemCommandInput(commandInput),
+            userInputHandler.getIntInput(
+                "Please type a number as shown in menu:" + "\n" + "> ",
+                "Please enter a valid number from the menu");
+        return new Command(commands.getMainCommandInput(commandInput),
+            commands.getEditCommandInput(commandInput),
+            commands.getSearchCommandInput(commandInput),
             commands.getRemoveCommandInput(commandInput));
     }
 

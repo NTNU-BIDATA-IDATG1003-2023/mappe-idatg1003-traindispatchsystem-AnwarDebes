@@ -2,7 +2,7 @@ package edu.ntnu.stud.commandhandler;
 
 /**
  * Holds information about a command input that was issued by the user and returns words from
- * their correspondent enum class
+ * their correspondent enum class.
  *
  * @author Anwar
  * @version 0.0.1
@@ -23,12 +23,14 @@ public class Command
     // remove menu commands
     private final RemoveCommands removeCommands;
     /**
-     * initializes the command objects and objects of the enum classes holding commands
+     * initializes the command objects and objects of the enum classes holding commands.
      *
      * @param mainMenuCommands the main menu mainMenuCommands
      * @param editCommands the editCommands menu
      * @param searchCommands  the searchCommands menu
+     * @param removeCommands the removeCommands menu
      */
+
     public Command(MainMenuCommands mainMenuCommands, EditCommands editCommands,
                    SearchCommands searchCommands, RemoveCommands removeCommands)
     {
@@ -45,7 +47,7 @@ public class Command
      *
      * @return The command words.
      */
-    public MainMenuCommands getCommandInput()
+    public MainMenuCommands getMainCommandInput()
     {
         return mainMenuCommands;
     }
@@ -71,6 +73,11 @@ public class Command
         return searchCommands;
     }
 
+    /**
+     * Return the command words of remove menu.
+     *
+     * @return The command word.
+     */
     public RemoveCommands getRemoveCommandInput()
     {
         return removeCommands;

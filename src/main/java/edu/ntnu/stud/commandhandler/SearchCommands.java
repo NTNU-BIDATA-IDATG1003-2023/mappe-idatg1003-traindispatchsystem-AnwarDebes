@@ -3,6 +3,7 @@ package edu.ntnu.stud.commandhandler;
 /**
  * Representations for all the valid command words for the search menu
  * along with an int that shows command ordinal.
+ *
  * @author Anwar Debes
  * @version 0.0.1
  */
@@ -22,23 +23,22 @@ public enum SearchCommands
     LANE(5),
     // Command to search by delay
     DELAY(6),
-    // Command to show help
-    HELP(7),
+
     // Command to go back to main menu
-    BACK(8),
+    BACK(7),
     // Command to exit the program
-    QUIT(9);
+    QUIT(8);
 
 
     // The searchCommand for input of search menu
-    private int commandInput;
+    private final int commandInput;
 
     /**
      * Initialise with the corresponding searchCommand input.
      *
      * @param commandInput The command input.
      */
-   private SearchCommands(int commandInput)
+    SearchCommands(int commandInput)
     {
         this.commandInput = commandInput;
     }

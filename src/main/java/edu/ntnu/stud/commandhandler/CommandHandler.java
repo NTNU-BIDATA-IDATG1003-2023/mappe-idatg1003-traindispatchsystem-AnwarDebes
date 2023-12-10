@@ -18,45 +18,46 @@ import java.util.Map;
 public class CommandHandler
 {
     // A map to store valid main menu commands indexed by their ordinal values.
-    private final Map<Integer, MainMenuCommands> validCommands;
+    private final Map<Integer, MainMenuCommands> mainCommands;
     // A map to store valid editing commands indexed by their ordinal values.
-    private final Map<Integer, EditCommands> adjustValidCommands;
+    private final Map<Integer, EditCommands> editCommands;
     // A map to store valid search commands indexed by their ordinal values.
-    private final Map<Integer, SearchCommands> searchForItemCommands;
+    private final Map<Integer, SearchCommands> searchCommands;
     // A map to store valid remove commands indexed by their ordinal values.
     private final Map<Integer, RemoveCommands> removeCommands;
 
     /**
      * Constructor - initializes the command input maps for different categories of commands.
-     * It populates each map with command enums, excluding the unkown command type for each category
+     * It populates each map with command enums, excluding the unknown command type for
+     * each category
      */
     public CommandHandler()
     {
-        validCommands = new HashMap<>();
-        adjustValidCommands = new HashMap<>();
-        searchForItemCommands = new HashMap<>();
+        mainCommands = new HashMap<>();
+        editCommands = new HashMap<>();
+        searchCommands = new HashMap<>();
         removeCommands = new HashMap<>();
 
-        // Populate each map with respective command enums, excluding unkown.
+        // Populate each map with respective command enums, excluding unknown.
         for (MainMenuCommands command : MainMenuCommands.values())
         {
             if (command != MainMenuCommands.UNKNOWN)
             {
-                validCommands.put(command.ordinal(), command);
+                mainCommands.put(command.ordinal(), command);
             }
         }
         for (EditCommands adjustCommand : EditCommands.values())
         {
             if (adjustCommand != EditCommands.UNKNOWN)
             {
-                adjustValidCommands.put(adjustCommand.ordinal(), adjustCommand);
+                editCommands.put(adjustCommand.ordinal(), adjustCommand);
             }
         }
         for (SearchCommands searchForItemCommand : SearchCommands.values())
         {
             if (searchForItemCommand != SearchCommands.UNKNOWN)
             {
-                this.searchForItemCommands.put(searchForItemCommand.ordinal(),
+                this.searchCommands.put(searchForItemCommand.ordinal(),
                     searchForItemCommand);
             }
         }
@@ -73,13 +74,13 @@ public class CommandHandler
      * Find the command ordinal associated with a main menu enum command words.
      *
      * @param commandInput The integer to look up.
-     * @return The CommandWord corresponding to Command input ordinal, or unkown
-     * if it is not a valid command input.
+     * @return The CommandWord corresponding to Command input ordinal, or unknown
+     *     if it is not a valid command input.
      */
-    public MainMenuCommands getCommandInput(int commandInput)
+    public MainMenuCommands getMainCommandInput(int commandInput)
     {
-        MainMenuCommands command = validCommands.get(commandInput);
-        if (commandInput > 0 && commandInput <= validCommands.size())
+        MainMenuCommands command = mainCommands.get(commandInput);
+        if (commandInput > 0 && commandInput <= mainCommands.size())
         {
             return command;
         } else
@@ -95,10 +96,10 @@ public class CommandHandler
      * @return The CommandWord corresponding to adjust command input ordinal, or UNKNOWN
      *        if it is not a valid command word.
      */
-    public EditCommands getAdjustCommandInput(int commandInput)
+    public EditCommands getEditCommandInput(int commandInput)
     {
-        EditCommands adjustCommand = adjustValidCommands.get(commandInput);
-        if (commandInput > 0 && commandInput <= adjustValidCommands.size())
+        EditCommands adjustCommand = editCommands.get(commandInput);
+        if (commandInput > 0 && commandInput <= editCommands.size())
         {
             return adjustCommand;
         } else
@@ -114,10 +115,10 @@ public class CommandHandler
      * @return The CommandWord corresponding to searchCommand input ordinal, or UNKNOWN
      *        if it is not a valid command word.
      */
-    public SearchCommands getSearchForItemCommandInput(int commandInput)
+    public SearchCommands getSearchCommandInput(int commandInput)
     {
-        SearchCommands command = searchForItemCommands.get(commandInput);
-        if (commandInput > 0 && commandInput <= searchForItemCommands.size())
+        SearchCommands command = searchCommands.get(commandInput);
+        if (commandInput > 0 && commandInput <= searchCommands.size())
         {
             return command;
         } else
