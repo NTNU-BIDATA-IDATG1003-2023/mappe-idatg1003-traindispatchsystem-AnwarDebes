@@ -17,7 +17,7 @@ public class UserInputHandler
     private final Scanner reader;
 
     /**
-     * constructor to reuse objects of scanner and printer massage class from smartHua class.
+     * constructor to reuse objects of scanner and printer message class from smartHua class.
      *
      * @param reader gets scanner class from SmartHus class
      */
@@ -27,9 +27,9 @@ public class UserInputHandler
     }
 
     /**
-     * Checks if integer input is valid.
+     * Reads user input and checks if it is a valid integer.
      *
-     * @return if input is valid
+     * @return the valid integer input from the user.
      */
     public int readAndCheckIfInputInt()
     {
@@ -42,14 +42,20 @@ public class UserInputHandler
         return reader.nextInt();
     }
 
-
-    public String getStringInput(String massage, String errorMassage)
+    /**
+     * Reads user input and checks if it is a valid string.
+     *
+     * @param message The message to be displayed to the user.
+     * @param errormessage The error message to be displayed in case of invalid input.
+     * @return the valid string input from the user.
+     */
+    public String getStringInput(String message, String errormessage)
     {
         String stringInput;
         boolean stringValid = false;
         do
         {
-            System.out.print(massage);
+            System.out.print(message);
 
             stringInput = reader.next();
             if (Boolean.TRUE.equals(CheckValid.checkValidString(stringInput, ""))
@@ -59,7 +65,7 @@ public class UserInputHandler
 
             } else
             {
-                System.err.print(errorMassage + "\n" + "> ");
+                System.err.print(errormessage + "\n" + "> ");
 
 
             }
@@ -68,13 +74,20 @@ public class UserInputHandler
         return stringInput;
     }
 
-    public String getTimeInput(String massage, String errorMassage)
+    /**
+     * Reads user input and checks if it is a valid time format.
+     *
+     * @param message The message to be displayed to the user.
+     * @param errormessage The error message to be displayed in case of invalid input.
+     * @return the valid time input from the user.
+     */
+    public String getTimeInput(String message, String errormessage)
     {
         String stringInput;
         boolean stringValid = false;
         do
         {
-            System.out.print(massage);
+            System.out.print(message);
 
             stringInput = reader.next();
             try
@@ -87,20 +100,28 @@ public class UserInputHandler
                 }
             } catch (IllegalArgumentException e)
             {
-                System.err.print(errorMassage + "\n" + "> ");
+                System.err.print(errormessage + "\n" + "> ");
             }
 
         } while (!stringValid);
         return stringInput;
     }
 
-    public String getClockInput(String massage, String errorMassage, String oldTime)
+    /**
+     * Reads user input and checks if it is a valid time format and is after the specified time.
+     *
+     * @param message The message to be displayed to the user.
+     * @param errormessage The error message to be displayed in case of invalid input.
+     * @param oldTime The time to compare the input against.
+     * @return the valid time input from the user.
+     */
+    public String getClockInput(String message, String errormessage, String oldTime)
     {
         String stringInput;
         boolean stringValid = false;
         do
         {
-            System.out.print(massage);
+            System.out.print(message);
 
             stringInput = reader.next();
             try
@@ -116,20 +137,27 @@ public class UserInputHandler
                 }
             } catch (IllegalArgumentException e)
             {
-                System.err.print(errorMassage + "\n" + "> ");
+                System.err.print(errormessage + "\n" + "> ");
             }
 
         } while (!stringValid);
         return stringInput;
     }
 
-    public int getIntInput(String massage, String errorMessage)
+    /**
+     * Reads user input and checks if it is a valid integer.
+     *
+     * @param message The message to be displayed to the user.
+     * @param errorMessage The error message to be displayed in case of invalid input.
+     * @return the valid integer input from the user.
+     */
+    public int getIntInput(String message, String errorMessage)
     {
         int intInput;
         boolean intValid = false;
         do
         {
-            System.out.print(massage);
+            System.out.print(message);
 
             intInput = readAndCheckIfInputInt();
             try
@@ -147,13 +175,20 @@ public class UserInputHandler
         return intInput;
     }
 
-    public int getTrackInput(String massage, String errorMessage)
+    /**
+     * Reads user input and checks if it is a valid track number.
+     *
+     * @param message The message to be displayed to the user.
+     * @param errorMessage The error message to be displayed in case of invalid input.
+     * @return the valid track number input from the user.
+     */
+    public int getTrackInput(String message, String errorMessage)
     {
         int intInput;
         boolean intValid = false;
         do
         {
-            System.out.print(massage);
+            System.out.print(message);
 
             intInput = readAndCheckIfInputInt();
             try
@@ -171,14 +206,22 @@ public class UserInputHandler
         } while (!intValid);
         return intInput;
     }
-
-
-    public String checkStringInput(String wantedInput, String unwantedInput, String massage,
-                                   String errorMassage)
+    
+    /**
+     * Checks if the provided string input matches the unwanted input, and prompts the user until a valid input is given.
+     *
+     * @param wantedInput The input string to validate.
+     * @param unwantedInput The string input that is not accepted.
+     * @param message The message to be displayed to the user.
+     * @param errorMessage The error message to be displayed in case of invalid input.
+     * @return a valid string input that doesn't match the unwanted input.
+     */
+    public String checkStringInput(String wantedInput, String unwantedInput, String message,
+                                   String errorMessage)
     {
         while (wantedInput.equalsIgnoreCase(unwantedInput))
         {
-            wantedInput = getStringInput(massage, errorMassage);
+            wantedInput = getStringInput(message, errorMessage);
             if (wantedInput.equalsIgnoreCase(unwantedInput))
             {
                 System.err.println(
@@ -188,20 +231,29 @@ public class UserInputHandler
         return wantedInput;
     }
 
-    public String checkResponseInput(String response1, String response2, String massage,
-                                     String errorMassage)
+    /**
+     * Validates the user response against two acceptable responses.
+     *
+     * @param response1 The first acceptable response.
+     * @param response2 The second acceptable response.
+     * @param message The message to be displayed to the user.
+     * @param errormessage The error message to be displayed in case of invalid input.
+     * @return the valid response input from the user.
+     */
+    public String checkResponseInput(String response1, String response2, String message,
+                                     String errormessage)
     {
         String response;
         boolean responseValid = false;
         do
         {
-            response = getStringInput(massage, errorMassage);
+            response = getStringInput(message, errormessage);
             if (response.equalsIgnoreCase(response1) || response.equalsIgnoreCase(response2))
             {
                 responseValid = true;
             } else
             {
-                System.err.print(errorMassage + "\n" + "> ");
+                System.err.print(errormessage + "\n" + "> ");
             }
         } while (!responseValid);
         return response;
