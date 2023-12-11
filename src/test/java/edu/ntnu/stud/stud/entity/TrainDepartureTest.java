@@ -17,13 +17,13 @@ class TrainDepartureTest {
   }
 
   @Test
-  void setDepartureTimePositiv() {
+  void setDepartureTimePositive() {
     trainDeparture.setDepartureTime(LocalTime.parse("21:15"));
         assertEquals("21:15", trainDeparture.getDepartureTime().toString());
 
   }
   @Test
-  void setDepartureTimeNegativ() {
+  void setDepartureTimeNegative() {
     try {
       trainDeparture.setDepartureTime( LocalTime.parse("25:15"));
       fail("Should throw exception");
@@ -64,7 +64,7 @@ class TrainDepartureTest {
   }
 
   @Test
-  void setDestinationPositiv() {
+  void setDestinationPositive() {
     trainDeparture.setDestination("Trondheim");
     assertEquals("Trondheim", trainDeparture.getDestination());
   }
@@ -79,13 +79,13 @@ class TrainDepartureTest {
   }
 
   @Test
-  void setTrackPositiv() {
+  void setTrackPositive() {
     trainDeparture.setTrack(2);
     assertEquals(2, trainDeparture.getTrack());
 
   }
   @Test
-  void setTrackNegativ() {
+  void setTrackNegative() {
    try {
      trainDeparture.setTrack(-500);
      fail("Should throw exception");
@@ -95,7 +95,7 @@ class TrainDepartureTest {
   }
 
   @Test
-  void setDelayPositiv() {
+  void setDelayPositive() {
     trainDeparture.setDelay( LocalTime.parse("23:59"));
     assertEquals("23:59", trainDeparture.getDelay().toString());
   }
