@@ -856,7 +856,21 @@ public class UserInterfaceController
             result.append("\n" + "|").append("-".repeat(96)).append("|");
             System.out.println(result);
         }
-        return inputHandler.getIntInput("Enter number: ", "Please enter a valid number");
+        boolean finished = false;
+        int choice = 0;
+        while (!finished)
+        {
+             choice = inputHandler.getIntInput("Enter number: ", "Please enter a valid number");
+            if (choice > 0 && choice <= i)
+            {
+                finished = true;
+
+            } else
+            {
+                System.err.println("Please enter a valid number");
+            }
+        }
+        return choice;
     }
 
     /**
