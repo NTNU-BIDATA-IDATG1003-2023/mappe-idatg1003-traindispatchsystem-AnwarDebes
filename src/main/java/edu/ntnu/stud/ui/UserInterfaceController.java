@@ -76,16 +76,6 @@ public class UserInterfaceController
         userInterfaceView = new UserInterfaceView();
         inputHandler = new UserInputHandler(reader);
         parser = new Parser(inputHandler);
-        // adding dummy data for testing
-        TrainDeparture t1 = new TrainDeparture(LocalTime.parse("12:10"), "L1", 1, "Oslo", 1,
-            LocalTime.parse("00:00"));
-        TrainDeparture t2 = new TrainDeparture(LocalTime.parse("12:20"), "L2", 2, "Stavanger", 2,
-            LocalTime.parse("00:00"));
-        TrainDeparture t3 = new TrainDeparture(LocalTime.parse("12:30"), "L4", 3, "Trondheim", 3,
-            LocalTime.parse("00:00"));
-        register.addTrainDeparture(t1);
-        register.addTrainDeparture(t2);
-        register.addTrainDeparture(t3);
 
     }
 
@@ -860,7 +850,7 @@ public class UserInterfaceController
         int choice = 0;
         while (!finished)
         {
-             choice = inputHandler.getIntInput("Enter number: ", "Please enter a valid number");
+            choice = inputHandler.getIntInput("Enter number: ", "Please enter a valid number");
             if (choice > 0 && choice <= i)
             {
                 finished = true;
